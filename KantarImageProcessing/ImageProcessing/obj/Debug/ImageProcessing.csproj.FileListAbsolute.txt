@@ -1,0 +1,15 @@
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\ImageProcessing.exe.config
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\ImageProcessing.exe
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\ImageProcessing.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\ImageVideoProcessing.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\ImageVideoProcessing.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.csprojResolveAssemblyReference.cache
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\Interop.MODI.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\Interop.QuartzTypeLib.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\Interop.WMPLib.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.csproj.ResolveComReference.cache
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.frmImageProcessing.resources
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.Properties.Resources.resources
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.csproj.GenerateResource.Cache
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.exe
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.pdb

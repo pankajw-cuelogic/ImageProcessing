@@ -1,0 +1,15 @@
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\ImageVideoProcessing.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\ImageVideoProcessing.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\AForge.Video.FFMPEG.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\DirectShowLib.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\AForge.Video.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\AForge.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\AForge.Video.FFMPEG.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\DirectShowLib.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\AForge.Video.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\AForge.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.csprojResolveAssemblyReference.cache
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\Interop.MODI.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.csproj.ResolveComReference.cache
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.pdb
