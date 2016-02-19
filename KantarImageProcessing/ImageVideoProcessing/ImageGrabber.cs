@@ -14,6 +14,7 @@ namespace ImageVideoProcessing
     public class ImageGrabber
     {
         #region Global Declaration
+        int pixelIncrementVal = 2;
 
         #endregion
 
@@ -22,18 +23,20 @@ namespace ImageVideoProcessing
         /// <summary>
         /// Reason : To get Text from image
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
+        /// <param name="fileName">Input file name</param>
+        /// <returns>Return Text from image</returns>
         public string ExtractTextFromImage(string fileName)
         {
             try
             {
-                GC.WaitForPendingFinalizers();
+                if (fileName.Trim() == "")
+                    return "File name can not be null";
 
                 string ExtractedTest = "";
-                string filePath = fileName.Trim() != "" ? @fileName : @"C:\Users\Cuelogic\Desktop\sample images\Untitled.png";
                 Document doc = new Document();
-                doc.Create(filePath);
+
+                GC.WaitForPendingFinalizers();
+                doc.Create(fileName);
                 Thread.Sleep(500);
                 try
                 {
@@ -62,22 +65,23 @@ namespace ImageVideoProcessing
         /// Reason : To get color codes from image
         /// Image devided into #x# parts to pickup pixel colors
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
+        /// <param name="fileName">Input filr name</param>
+        /// <param name="colorNames">Returns colors and their density in image</param>
+        /// <returns>returns color model</returns>
         public List<ColorModel> GetImageColors(string fileName, ref string colorNames)
         {
             Bitmap bmp = new Bitmap(fileName);
             HashSet<string> colors = new HashSet<string>();
             List<string> colorList = new List<string>();
-            int Red = 0, Blue = 0, Green = 0, Yellow = 0, Pink = 0, SkyBlue = 0, Orange = 0, Purple = 0, White = 0, Black = 0;
-            for (int x = 0; x < bmp.Size.Width; x += 5)
+            int Red = 0, Blue = 0, Green = 0, Yellow = 0, Pink = 0, SkyBlue = 0, Orange = 0, Purple = 0, White = 0, Black = 0, Grey=0,Brown=0;
+            for (int x = 0; x < bmp.Size.Width; x +=pixelIncrementVal)
             {
-                for (int y = 0; y < bmp.Size.Height; y += 5)
+                for (int y = 0; y < bmp.Size.Height; y += pixelIncrementVal)
                 {
                     try
                     {
-                        var v = from t in colors where t == (bmp.GetPixel(x, y)).Name select t;
-                        if (!(v.Count() > 0))
+                        //var v = from t in colors where t == (bmp.GetPixel(x, y)).Name select t;
+                        //if (!(v.Count() > 0))
                         {
                             colors.Add(bmp.GetPixel(x, y).Name.ToString());
                             string color = GetColorFromRGB(bmp.GetPixel(x, y).R, bmp.GetPixel(x, y).G, bmp.GetPixel(x, y).B);
@@ -117,6 +121,12 @@ namespace ImageVideoProcessing
                                 case "Black":
                                     Black += 1;
                                     break;
+                                case "Grey":
+                                    Grey += 1;
+                                    break;
+                                case "Brown":
+                                    Brown += 1;
+                                    break;
                                 default:
                                     break;
                             }
@@ -127,9 +137,7 @@ namespace ImageVideoProcessing
                     }
                 }
             }
-
-            return GetUniqueColorList(colorList, Red, Blue, Green, Yellow, Pink, SkyBlue, Orange, Purple, White, Black,ref colorNames);
-
+            return GetUniqueColorList(colorList, Red, Blue, Green, Yellow, Pink, SkyBlue, Orange, Purple, White, Black,Grey,Brown,ref colorNames);
         }
                
         /// <summary>
@@ -147,7 +155,7 @@ namespace ImageVideoProcessing
         /// <param name="White"></param>
         /// <param name="Black"></param>
         /// <returns></returns>
-        public List<ColorModel> GetUniqueColorList(List<string> colorList, int Red, int Blue, int Green, int Yellow, int Pink, int SkyBlue, int Orange, int Purple, int White, int Black, ref string colorNames)
+        private List<ColorModel> GetUniqueColorList(List<string> colorList, int Red, int Blue, int Green, int Yellow, int Pink, int SkyBlue, int Orange, int Purple, int White, int Black,int Grey,int Brown, ref string colorNames)
         {
             try
             {
@@ -191,6 +199,12 @@ namespace ImageVideoProcessing
                             break;
                         case "Black":
                             colorKeyValuelist.Add(new KeyValuePair<string, int>("Black", Black));
+                            break;
+                        case "Grey":
+                            colorKeyValuelist.Add(new KeyValuePair<string, int>("Grey", Grey));
+                            break;
+                        case "Brown":
+                            colorKeyValuelist.Add(new KeyValuePair<string, int>("Brown", Brown));
                             break;
                         default:
                             break;
@@ -258,6 +272,17 @@ namespace ImageVideoProcessing
                             cmObj.pecentage = Convert.ToInt32(percentage);
                             cmList.Add(cmObj);
                             break;
+
+                        case "Grey":
+                            cmObj.color = "Grey";
+                            cmObj.pecentage = Convert.ToInt32(percentage);
+                            cmList.Add(cmObj);
+                            break;
+                        case "Brown":
+                            cmObj.color = "Brown";
+                            cmObj.pecentage = Convert.ToInt32(percentage);
+                            cmList.Add(cmObj);
+                            break;
                         default:
                             break;
                     }
@@ -279,19 +304,16 @@ namespace ImageVideoProcessing
         /// <param name="G"></param>
         /// <param name="B"></param>
         /// <returns></returns>
-        public String GetColorFromRGB(int R, int G, int B)
+        private String GetColorFromRGB(int R, int G, int B)
         {
             try
             {
-                if ((R > 180 && G < 90 && B < 90) || (R > G & R > B && (R - B) > 15 && (R - G) > 15))
-                {
-                    return "Red";
-                }
-                if ((B > 180 && G < 90 && R < 90) || (B > G & B > R && (B - R) > 15 && (B - G) > 15))
+               
+                if ((R < 50 && G < 50 && B > 150)|| (B > 180 && G < 90 && R < 90) || (B > G & B > R && (B - R) > 25 && (B - G) > 25))
                 {
                     return "Blue";
                 }
-                if ((G > 180 && B < 150 && R < 150) || (G > 50 && (G > B) && (G - R) > 15 && B < 200 && B < G))
+                if ((R < 50 && G > 150 && B < 50) || (G > 180 && B < 150 && R < 150) || (G > 50 && (G > B) && (G - R) > 25 && B < 200 && B < G))
                 {
                     return "Green";
                 }
@@ -299,7 +321,7 @@ namespace ImageVideoProcessing
                 {
                     return "Yellow";
                 }
-                if (R > 180 && B > 180 && G < 90)
+                if ( (R > 150 && G < 50 && B > 150)|| (R > 180 && B > 180 && G < 90))
                 {
                     return "Pink";
                 }
@@ -311,7 +333,7 @@ namespace ImageVideoProcessing
                 {
                     return "Orange";
                 }
-                if (B > 120 && (R > 80 && R < 170) && G < 100)
+                if ( (R > 80 && R< 120 && G > 0 && G< 110 && B > 180)|| (B > 120 && (R > 80 && R < 170) && G < 100))
                 {
                     return "Purple";
                 }
@@ -323,7 +345,18 @@ namespace ImageVideoProcessing
                 {
                     return "Black";
                 }
-
+                if ( (R > 70 && R< 120 && G < 50 && B < 50)|| (R>120&&R<210 && G > 60 && G < 150 && B > 40 && B < 120 && (R-G)>50 && (R - G) < 75) && (G-B) < 55 )
+                {
+                    return "Brown";
+                }
+                if (R > 40 && R < 240 && G > 40 && G < 240 && B > 40 && B < 240)
+                {
+                    return "Grey";
+                }
+                if ((R > 150 && G < 50 && B < 50) || (R > 180 && G < 90 && B < 90) || (R > G & R > B && (R - B) > 35 && (R - G) > 35))
+                {
+                    return "Red";
+                }
                 return "";
 
             }

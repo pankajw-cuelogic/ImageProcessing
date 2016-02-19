@@ -33,7 +33,6 @@
             this.btnUpload = new System.Windows.Forms.Button();
             this.txtFilePath = new System.Windows.Forms.TextBox();
             this.txtResult = new System.Windows.Forms.TextBox();
-            this.pbImage = new System.Windows.Forms.PictureBox();
             this.lblContent = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.txtColors = new System.Windows.Forms.TextBox();
@@ -42,14 +41,18 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.lblSelectFile = new System.Windows.Forms.Label();
             this.btnFaceDetect = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.pbLoading = new System.Windows.Forms.PictureBox();
+            this.pbImage = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.SuspendLayout();
             // 
             // btnProcess
             // 
-            this.btnProcess.Location = new System.Drawing.Point(483, 27);
+            this.btnProcess.Location = new System.Drawing.Point(465, 27);
             this.btnProcess.Name = "btnProcess";
-            this.btnProcess.Size = new System.Drawing.Size(115, 23);
+            this.btnProcess.Size = new System.Drawing.Size(87, 23);
             this.btnProcess.TabIndex = 0;
             this.btnProcess.Text = "Process Image";
             this.btnProcess.UseVisualStyleBackColor = true;
@@ -61,7 +64,7 @@
             // 
             // btnUpload
             // 
-            this.btnUpload.Location = new System.Drawing.Point(388, 26);
+            this.btnUpload.Location = new System.Drawing.Point(379, 27);
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.Size = new System.Drawing.Size(75, 23);
             this.btnUpload.TabIndex = 1;
@@ -85,15 +88,6 @@
             this.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtResult.Size = new System.Drawing.Size(495, 269);
             this.txtResult.TabIndex = 3;
-            // 
-            // pbImage
-            // 
-            this.pbImage.Location = new System.Drawing.Point(12, 94);
-            this.pbImage.MinimumSize = new System.Drawing.Size(350, 350);
-            this.pbImage.Name = "pbImage";
-            this.pbImage.Size = new System.Drawing.Size(360, 395);
-            this.pbImage.TabIndex = 6;
-            this.pbImage.TabStop = false;
             // 
             // lblContent
             // 
@@ -134,9 +128,9 @@
             // 
             // btnProcessVideo
             // 
-            this.btnProcessVideo.Location = new System.Drawing.Point(616, 27);
+            this.btnProcessVideo.Location = new System.Drawing.Point(565, 27);
             this.btnProcessVideo.Name = "btnProcessVideo";
-            this.btnProcessVideo.Size = new System.Drawing.Size(115, 23);
+            this.btnProcessVideo.Size = new System.Drawing.Size(88, 23);
             this.btnProcessVideo.TabIndex = 11;
             this.btnProcessVideo.Text = "Process Video";
             this.btnProcessVideo.UseVisualStyleBackColor = true;
@@ -161,19 +155,50 @@
             // 
             // btnFaceDetect
             // 
-            this.btnFaceDetect.Location = new System.Drawing.Point(753, 29);
+            this.btnFaceDetect.Location = new System.Drawing.Point(669, 28);
             this.btnFaceDetect.Name = "btnFaceDetect";
-            this.btnFaceDetect.Size = new System.Drawing.Size(75, 23);
+            this.btnFaceDetect.Size = new System.Drawing.Size(71, 23);
             this.btnFaceDetect.TabIndex = 13;
             this.btnFaceDetect.Text = "Detect Face";
             this.btnFaceDetect.UseVisualStyleBackColor = true;
             this.btnFaceDetect.Click += new System.EventHandler(this.btnFaceDetect_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(752, 28);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(101, 23);
+            this.button1.TabIndex = 14;
+            this.button1.Text = "Search Duplicate";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // pbLoading
+            // 
+            this.pbLoading.Image = global::ImageProcessing.Properties.Resources.loading_spinner;
+            this.pbLoading.Location = new System.Drawing.Point(387, 243);
+            this.pbLoading.Name = "pbLoading";
+            this.pbLoading.Size = new System.Drawing.Size(125, 116);
+            this.pbLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbLoading.TabIndex = 0;
+            this.pbLoading.TabStop = false;
+            // 
+            // pbImage
+            // 
+            this.pbImage.Location = new System.Drawing.Point(12, 94);
+            this.pbImage.MinimumSize = new System.Drawing.Size(350, 350);
+            this.pbImage.Name = "pbImage";
+            this.pbImage.Size = new System.Drawing.Size(360, 395);
+            this.pbImage.TabIndex = 6;
+            this.pbImage.TabStop = false;
             // 
             // frmImageProcessing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 511);
+            this.Controls.Add(this.pbLoading);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnFaceDetect);
             this.Controls.Add(this.lblSelectFile);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -192,6 +217,7 @@
             this.Name = "frmImageProcessing";
             this.Text = "Image Processing";
             this.Load += new System.EventHandler(this.frmImageProcessing_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -213,6 +239,8 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label lblSelectFile;
         private System.Windows.Forms.Button btnFaceDetect;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox pbLoading;
     }
 }
 

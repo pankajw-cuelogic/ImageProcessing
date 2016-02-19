@@ -25,8 +25,8 @@ ffmpeg -i %1 -r 0.25 -s 320x220 -f image2 -q 2 img\%3_%%05d.png
 rem ffmpeg -i video.avi -r 0.5 -f image2 output_%05d.jpg
 
 rem Extract audio from input video file
-rem ffmpeg -i %1 video\%3_.mp3
-ffmpeg -i %1 video\%3_.wav
+rem ffmpeg -i %1 video\%3.mp3
+ffmpeg -i %1 video\%3.wav
 
 rem %2 if info file name
 @echo output start>%2.txt
