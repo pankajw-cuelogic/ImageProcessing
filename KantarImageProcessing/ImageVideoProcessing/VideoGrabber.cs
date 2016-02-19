@@ -19,20 +19,22 @@ namespace ImageVideoProcessing
         /// <summary>
         /// Reason : To get Video details of its all frames, traverse each frame from video
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="filePath"></param>
-        /// <param name="batchFilePath"></param>
-        /// <param name="contentMessage"></param>
-        /// <param name="colorMessage"></param>
-        public void GetVideoDetails(string path, string filePath, string batchFilePath, string frameName, ref string contentMessage, ref string colorMessage, ref string VideoInfo, ref string audiMessage)
+        /// <param name="outputImagePath">This path must be application startup + \bin\img\</param>
+        /// <param name="inputFilePath">This is input video file path</param>
+        /// <param name="batchFilePath">This is batch file path</param>
+        /// <param name="contentMessage">Returns contents from each frame by frame from video</param>
+        /// <param name="colorMessage">Returns color density from video</param>
+        /// <param name="videoInfo">Returns Metadata of video</param>
+        /// <param name="audioMessage">Returns text from video</param>
+        public void GetVideoDetails(string applicationStartupPath, string outputImagePath, string inputFilePath, string batchFilePath, string frameName, ref string contentMessage, ref string colorMessage, ref string videoInfo, ref string audioMessage)
         {
             try
             {
                 string duration = "";
                 int audioDuration = 0;
                 string infoFileName = "fileInfo";
-                string videoPath = path.Replace("\\img\\", "\\video\\");
-                DeleteAllFiles(path);
+                string videoPath = outputImagePath.Replace("\\img\\", "\\video\\");
+                DeleteAllFiles(outputImagePath);
 
                  //Start a process to execute batch file 
                  ProcessStartInfo psi = new ProcessStartInfo(batchFilePath);
@@ -40,40 +42,18 @@ namespace ImageVideoProcessing
                 psi.WindowStyle = ProcessWindowStyle.Hidden;
                 psi.CreateNoWindow = true;
                 psi.UseShellExecute = false;
-                psi.Arguments = String.Format("{0},{1},{2} ", filePath, infoFileName, frameName);
+                psi.Arguments = String.Format("{0},{1},{2} ", inputFilePath, infoFileName, frameName);
                 Process proc = new Process();
                 proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 proc = Process.Start(psi);
                 proc.WaitForExit();
 
-                GetFrameDetailsOfVideo(path, frameName, ref contentMessage, ref colorMessage);
-                GetVideoPropertyInfo(infoFileName, ref VideoInfo, ref duration);
+                GetFrameDetailsOfVideo(outputImagePath, frameName, ref contentMessage, ref colorMessage);
+                GetVideoPropertyInfo(applicationStartupPath,infoFileName, ref videoInfo, ref duration);
                 GetDurationInSeconds(duration, ref audioDuration);
 
-                //Break audio into #SECONDS sec parts
-                int startPointOfAudio = 0;
-                int noOfAudioFiles = 1;
-
-                ProcessStartInfo psiAudioBreak = new ProcessStartInfo(Application.StartupPath + @"\ff-prompt-AudioBreak.bat");
-                psiAudioBreak.RedirectStandardOutput = true;
-                psiAudioBreak.WindowStyle = ProcessWindowStyle.Hidden;
-                psiAudioBreak.CreateNoWindow = true;
-                psiAudioBreak.UseShellExecute = false;
-
-                for (noOfAudioFiles = 1; audioDuration > 0; noOfAudioFiles++)
-                {
-                    psiAudioBreak.Arguments = String.Format("{0},{1},{2},{3} ", videoPath + @"\" + frameName + "_.wav", startPointOfAudio,
-                        audioDuration > 10 ? 10 : audioDuration, frameName + noOfAudioFiles + ".wav");
-                    Process procAudioBreak = new Process();
-                    procAudioBreak.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    procAudioBreak = Process.Start(psiAudioBreak);
-                    procAudioBreak.WaitForExit();
-                    startPointOfAudio += 10;
-                    audioDuration -= 10;
-                }
-
-                //Test code end
-                new AudioGrabber().speechToText(videoPath + @"\" + frameName, noOfAudioFiles, ref audiMessage);
+                //Break audio into #SECONDS sec parts and get speech to text
+                new AudioGrabber().ConvertAudioToText(applicationStartupPath, videoPath, frameName, audioDuration, ref audioMessage);
 
             }
             catch (Exception ex)
@@ -87,7 +67,7 @@ namespace ImageVideoProcessing
         /// Reason To Delete all files from give path
         /// </summary>
         /// <param name="path"></param>
-        public void DeleteAllFiles(string path)
+        private void DeleteAllFiles(string path)
         {
             //Delete all existing files from directory
             try
@@ -107,7 +87,7 @@ namespace ImageVideoProcessing
         /// <param name="path"></param>
         /// <param name="contentMessage"></param>
         /// <param name="colorMessage"></param>
-        public void GetFrameDetailsOfVideo(string path, string frameName, ref string contentMessage, ref string colorMessage)
+        private void GetFrameDetailsOfVideo(string path, string frameName, ref string contentMessage, ref string colorMessage)
         {
             try
             {
@@ -147,7 +127,8 @@ namespace ImageVideoProcessing
                 {
                     foreach (var x in avgColorList)
                     {
-                        colorMessage += " " + x.color + " : " + Convert.ToInt32(Math.Round(x.colorPercentage)) + "%\r\n";
+                        int percentage = Convert.ToInt32(Math.Round(x.colorPercentage));
+                        colorMessage += percentage != 0 ? " " + x.color + " : " + Convert.ToInt32(Math.Round(x.colorPercentage)) + "%\r\n" : "";
                     }
                 }
             }
@@ -167,12 +148,12 @@ namespace ImageVideoProcessing
         /// <param name="infoFileName"></param>
         /// <param name="VideoInfo"></param>
         /// <returns></returns>
-        public string GetVideoPropertyInfo(string infoFileName, ref string VideoInfo, ref string Duration)
+        private string GetVideoPropertyInfo(string applicationStartupPath, string infoFileName, ref string VideoInfo, ref string Duration)
         {
             try
             {
                 Boolean isResultStart = false;
-                string[] lines = System.IO.File.ReadAllLines(Application.StartupPath + "\\bin\\" + infoFileName + ".txt");
+                string[] lines = System.IO.File.ReadAllLines(applicationStartupPath + "\\bin\\" + infoFileName + ".txt");
                 foreach (string line in lines)
                 {
                     if (line.Contains("Metadata:") && isResultStart == false)
@@ -252,7 +233,7 @@ namespace ImageVideoProcessing
         /// <param name="filters"></param>
         /// <param name="isRecursive"></param>
         /// <returns></returns>
-        public static String[] GetFilesFrom(String searchFolder, String[] filters, bool isRecursive, string frameEntries)
+        private static String[] GetFilesFrom(String searchFolder, String[] filters, bool isRecursive, string frameEntries)
         {
             List<String> filesFound = new List<String>();
             var searchOption = isRecursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
@@ -268,7 +249,7 @@ namespace ImageVideoProcessing
         /// </summary>
         /// <param name="Duration"></param>
         /// <returns></returns>
-        public void GetDurationInSeconds(string Duration, ref int audioDuration)
+        private void GetDurationInSeconds(string Duration, ref int audioDuration)
         {
             try
             {

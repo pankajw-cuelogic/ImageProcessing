@@ -13,3 +13,5 @@ D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\Imag
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.csproj.GenerateResource.Cache
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.exe
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\Emgu.CV.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\Emgu.Util.dll

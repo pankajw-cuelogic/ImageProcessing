@@ -3,9 +3,10 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
-using Emgu.CV;
-using Emgu.CV.Structure;
-using Emgu.CV.CvEnum;
+//using Emgu.CV;
+//using Emgu.CV.Structure;
+//using Emgu.CV.CvEnum;
+using ImageVideoProcessing;
 
 namespace ImageProcessing
 {
@@ -17,6 +18,7 @@ namespace ImageProcessing
         string[] imageExtensions = { ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF" };
         int noOfFaces = 0;
         Bitmap newFrame = null;
+        string appStartPath = Application.StartupPath;
         #endregion
         public frmImageProcessing()
         {
@@ -37,15 +39,16 @@ namespace ImageProcessing
             }
 
             DisposeControls();
+            ShowLoader();
             string colorNames = "";
             string path = txtFilePath.Text.ToString();
-            Cursor.Current = Cursors.WaitCursor;
-            
+            //Cursor.Current = Cursors.WaitCursor;
             
             txtResult.Text = new ImageVideoProcessing.ImageGrabber().ExtractTextFromImage(path);
             new ImageVideoProcessing.ImageGrabber().GetImageColors(path, ref colorNames);
             txtColors.Text = "\tImage contains following major colors:"+ colorNames;
             Cursor.Current = Cursors.AppStarting;
+            HideLoader();
         }
 
         /// <summary>
@@ -91,7 +94,8 @@ namespace ImageProcessing
                 MessageBox.Show("Please select valid Video file!!"); return;
             }
 
-            Cursor.Current = Cursors.WaitCursor;
+            //Cursor.Current = Cursors.WaitCursor;
+            ShowLoader();
             DisposeControls();
             flowLayoutPanel1.BringToFront();
             string contentMessage = "";
@@ -99,19 +103,19 @@ namespace ImageProcessing
             string videoInfo = "";
             string audiMessage = "";
             string frameName = Guid.NewGuid().ToString();
-            string path = Application.StartupPath + @"\bin\img\";
+            string path = appStartPath + @"\bin\img\";
             string filePath = txtFilePath.Text.ToString().Trim();
-            string batchFilePath = Application.StartupPath + @"\ff-prompt.bat";
+            string batchFilePath = appStartPath + @"\ff-prompt.bat";
 
             try
             {
-                new ImageVideoProcessing.VideoGrabber().GetVideoDetails(path, filePath, batchFilePath, frameName, ref contentMessage, ref colorMessage, ref videoInfo, ref audiMessage);
+                new ImageVideoProcessing.VideoGrabber().GetVideoDetails(appStartPath, path, filePath, batchFilePath, frameName, ref contentMessage, ref colorMessage, ref videoInfo, ref audiMessage);
                 txtColors.Text = "\t Video contains following major colors :\r\n"+ colorMessage;
                 txtResult.Text = "\t Video contains following properties :" + videoInfo
                                     + "\r\n\r\n Content from video, frame by frame:\r\n" + contentMessage
                                     + "\r\n\r\n Audio contains following text: \r\n" + audiMessage;
                        
-                DirectoryInfo directory = new DirectoryInfo(Application.StartupPath + @"\bin\img");
+                DirectoryInfo directory = new DirectoryInfo(appStartPath + @"\bin\img");
                 FileInfo[] files = directory.GetFiles(frameName+ "*.png").ToArray();
 
                 ShowAllFramesOnPanel(files, frameName);
@@ -125,6 +129,7 @@ namespace ImageProcessing
             {
                 GC.Collect();
                 Cursor.Current = Cursors.AppStarting;
+                HideLoader();
             }
         }
         public void DisposeControls()
@@ -163,7 +168,7 @@ namespace ImageProcessing
                 {
                     noOfFaces = 0;
                     newFrame = null;
-                    FaceDetect(files[i].FullName, ref noOfFaces, ref newFrame);
+                    ///FaceDetect(files[i].FullName, ref noOfFaces, ref newFrame);
 
                     flws[i] = new FlowLayoutPanel();
                     flws[i].Name = "flw" + i;
@@ -207,9 +212,10 @@ namespace ImageProcessing
             return -1 != Array.IndexOf(mediaExtensions, Path.GetExtension(path).ToUpperInvariant());
         }
 
-        #region test code
+        #region Face Detection code
         
-        private HaarCascade haar;
+        //private HaarCascade haar;
+        /*
         private void FaceDetect(string path,ref int noOfFaces, ref Bitmap newFrame )
         {
             Bitmap bmp = (Bitmap)Image.FromFile(path);
@@ -237,18 +243,24 @@ namespace ImageProcessing
                 }
             }
         }
-
+        */
         private void LoadXML()
         {
-            haar = new HaarCascade(Application.StartupPath + @"\haarcascade_frontalface_default.xml");
+            // haar = new HaarCascade(appStartPath + @"\haarcascade_frontalface_default.xml");
         }
         #endregion
 
         private void frmImageProcessing_Load(object sender, EventArgs e)
         {
+            HideLoader();
             LoadXML();
         }
 
+        /// <summary>
+        /// Reason : TO detect face on selected image, if face(s) detect then mark it in box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFaceDetect_Click(object sender, EventArgs e)
         {
             if (!IsMediaFile(txtFilePath.Text.ToString().Trim(), imageExtensions))
@@ -256,8 +268,101 @@ namespace ImageProcessing
                 MessageBox.Show("Please select valid Image file!!");
                 return;
             }
-            FaceDetect(openFileDialog1.FileName,ref noOfFaces ,ref newFrame);
+            ShowLoader();
+            new FaceDetection().FaceDetect(appStartPath, txtFilePath.Text.ToString(), ref noOfFaces, ref newFrame);
+            HideLoader();
+            pbImage.Image = newFrame;
+            pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbImage.BringToFront();
             MessageBox.Show("Selected Image contains "+ noOfFaces +" faces.");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!IsMediaFile(txtFilePath.Text.ToString().Trim(), imageExtensions))
+            {
+                MessageBox.Show("Please select valid Image file!!");
+                return;
+            }
+
+            DisposeControls();
+            ShowLoader();
+            string message = "";
+            string fileNames = "";
+            string percentage = "";
+            string targetDirPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\bin\img";
+            new DuplicateImageSearch().GetAllSimilarImages(txtFilePath.Text.ToString(), 100000, targetDirPath , ref message, ref fileNames, ref percentage);
+            txtResult.Text =message.Trim()!= "Following files are matches with selected image,"?message: "Selected Image not matched with any existing images";
+
+            if(fileNames.Trim()!="" && percentage.Trim() != "")
+            {
+                ShowAllFramesOnPanel(fileNames, percentage);
+            }
+
+            HideLoader();
+        }
+
+        /// <summary>
+        /// Reason : To show all Duplicate matched images on grid panel
+        /// </summary>
+        /// <param name="imageName"></param>
+        /// <param name="percentage"></param>
+        private void ShowAllFramesOnPanel( string imageName, string percentage)
+        {
+            flowLayoutPanel1.BringToFront();
+            try
+            {
+                string[] fileArray = imageName.Split(',');
+                string[] PercentageArray = percentage.Split(',');
+
+                int totalFiles = imageName.Split(',').Count();
+                PictureBox[] pics = new PictureBox[totalFiles];
+                FlowLayoutPanel[] flws = new FlowLayoutPanel[totalFiles];
+                
+                Label[] lbl = new Label[totalFiles];
+
+                int brh = 0;
+                for (int i = 0; i <= totalFiles; i++)
+                {
+                    noOfFaces = 0;
+                    newFrame = null;
+
+                    flws[i] = new FlowLayoutPanel();
+                    flws[i].Name = "flw" + i;
+                    flws[i].Location = new Point(3, brh);
+                    flws[i].Size = new Size(217, 210);
+                    flws[i].BackColor = Color.DarkCyan;
+                    flws[i].BorderStyle = BorderStyle.Fixed3D;
+
+                    lbl[i] = new Label();
+                    lbl[i].Name = PercentageArray[i];
+                    lbl[i].Size = new Size(100, 35);
+                    lbl[i].Text = PercentageArray[i];
+
+                    pics[i] = new PictureBox();
+                    pics[i].Name = fileArray[i];
+                    pics[i].Size = new Size(217, 175);
+                    pics[i].Image = System.Drawing.Image.FromFile(fileArray[i]);
+                    pics[i].SizeMode = PictureBoxSizeMode.StretchImage;
+
+                    flws[i].Controls.Add(lbl[i]);
+                    flws[i].Controls.Add(pics[i]);
+
+                    this.Controls.Add(flws[i]);
+                    flowLayoutPanel1.Controls.Add(flws[i]);
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+        public void ShowLoader()
+        {
+            pbLoading.Show();
+        }
+        public void HideLoader()
+        {
+            pbLoading.Hide();
         }
     }
 }

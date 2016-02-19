@@ -2,89 +2,63 @@
 using System.Speech.Recognition;
 using System.Windows.Forms;
 using System.Threading;
+using System.Diagnostics;
 
 namespace ImageVideoProcessing
 {
     public class AudioGrabber
     {
         
-        #region SpeechRecognition for Live audio
-
-        bool completed;
+        #region SpeechRecognition for audio
         public Thread recThread;
         public Boolean recongnizerState = true;
-        
-        public void converAudioToVideo( string path)
-
-        // Initialize an in-process speech recognition engine.
-        {
-            using (SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine())
-            {
-                // Create and load a grammar.
-                GrammarBuilder build = new GrammarBuilder();
-                build.AppendDictation();
-                Grammar wordsList = new Grammar(build);
-                recognizer.LoadGrammar(wordsList);
-
-                // Configure the input to the recognizer.
-                recognizer.SetInputToWaveFile(path);
-
-                // Attach event handlers for the results of recognition.
-                recognizer.SpeechRecognized +=
-                  new EventHandler<SpeechRecognizedEventArgs>(recognizer_SpeechRecognized);
-                recognizer.RecognizeCompleted +=
-                  new EventHandler<RecognizeCompletedEventArgs>(recognizer_RecognizeCompleted);
-
-                // Perform recognition on the entire file.
-                Console.WriteLine("Starting asynchronous recognition...");
-                completed = false;
-                recognizer.RecognizeAsync(RecognizeMode.Multiple);
-
-                // Keep the console window open.
-                while (!completed)
-                { Console.ReadLine(); }
-                
-                RecognitionResult result = recognizer.Recognize();
-                string a = result.Text;
-                
-            }
-        }
-
-        // Handle the SpeechRecognized event.
-        public void recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
-        {
-            if (e.Result != null && e.Result.Text != null)
-            { MessageBox.Show("  Recognized text =  {0}", e.Result.Text); }
-            else
-            { MessageBox.Show("Recognized text not available."); }
-        }
-
-        // Handle the RecognizeCompleted event.
-        public void recognizer_RecognizeCompleted(object sender, RecognizeCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                Console.WriteLine("  Error encountered, {0}: {1}",
-                e.Error.GetType().Name, e.Error.Message);
-            }
-            if (e.Cancelled)
-            {
-                Console.WriteLine("  Operation cancelled.");
-            }
-            if (e.InputStreamEnded)
-            {
-                Console.WriteLine("  End of stream encountered.");
-            }
-            completed = true;
-        }
-
         #endregion
 
         #region Speech Recognition for wav file
 
-        public void speechToText(string path,int noOfAudioFiles, ref string audioMessage)
+        /// <summary>
+        /// Reason : To get break audio into multiple parts and get speech to text
+        /// </summary>
+        /// <param name="applicationStartupPath">Application startup path from where application is running</param>
+        /// <param name="audioFolderPath">Audio file folder path</param>
+        /// <param name="frameName">Audio file name without extentions (extentions should be .wav file)</param>
+        /// <param name="audioDuration">Audi duration in seconds</param>
+        /// <param name="audioMessage">return audio message in reference variable</param>
+        public void ConvertAudioToText(string applicationStartupPath,string audioFolderPath,string frameName, int audioDuration, ref string audioMessage)
         {
-           //converAudioToVideo(path);
+            //Break audio into #SECONDS sec parts
+            int startPointOfAudio = 0;
+            int noOfAudioFiles = 1;
+
+            ProcessStartInfo psiAudioBreak = new ProcessStartInfo(applicationStartupPath + @"\ff-prompt-AudioBreak.bat");
+            psiAudioBreak.RedirectStandardOutput = true;
+            psiAudioBreak.WindowStyle = ProcessWindowStyle.Hidden;
+            psiAudioBreak.CreateNoWindow = true;
+            psiAudioBreak.UseShellExecute = false;
+
+            for (noOfAudioFiles = 1; audioDuration > 0; noOfAudioFiles++)
+            {
+                psiAudioBreak.Arguments = String.Format("{0},{1},{2},{3} ", audioFolderPath + @"\" + frameName + ".wav", startPointOfAudio,
+                    audioDuration > 10 ? 10 : audioDuration, frameName + noOfAudioFiles + ".wav");
+                Process procAudioBreak = new Process();
+                procAudioBreak.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                procAudioBreak = Process.Start(psiAudioBreak);
+                procAudioBreak.WaitForExit();
+                startPointOfAudio += 10;
+                audioDuration -= 10;
+            }
+            //Get text for audio files
+            new AudioGrabber().speechToText(audioFolderPath + @"\" + frameName, noOfAudioFiles, ref audioMessage);
+        }
+
+        /// <summary>
+        /// Reason : To get speech to text data for given no of files
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="noOfAudioFiles"></param>
+        /// <param name="audioMessage"></param>
+        private void speechToText(string path,int noOfAudioFiles, ref string audioMessage)
+        {
             SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
             Grammar dictationGrammar = new DictationGrammar();
             recognizer.LoadGrammar(dictationGrammar);
