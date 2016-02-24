@@ -1,20 +1,17 @@
-﻿using System;
+﻿using MODI;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using MODI;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
-using System.IO;
-using System.Diagnostics;
-using System.Windows.Forms;
 
 namespace ImageVideoProcessing
 {
     public class ImageGrabber
     {
         #region Global Declaration
-        int pixelIncrementVal = 2;
+        int pixelIncrementVal = 1;
 
         #endregion
 
@@ -65,10 +62,10 @@ namespace ImageVideoProcessing
         /// Reason : To get color codes from image
         /// Image devided into #x# parts to pickup pixel colors
         /// </summary>
-        /// <param name="fileName">Input filr name</param>
+        /// <param name="fileName">Input file name</param>
         /// <param name="colorNames">Returns colors and their density in image</param>
         /// <returns>returns color model</returns>
-        public List<ColorModel> GetImageColors(string fileName, ref string colorNames)
+        public List<ColorModel> GetImageColors(string fileName)
         {
             Bitmap bmp = new Bitmap(fileName);
             HashSet<string> colors = new HashSet<string>();
@@ -137,7 +134,7 @@ namespace ImageVideoProcessing
                     }
                 }
             }
-            return GetUniqueColorList(colorList, Red, Blue, Green, Yellow, Pink, SkyBlue, Orange, Purple, White, Black,Grey,Brown,ref colorNames);
+            return GetUniqueColorList(colorList, Red, Blue, Green, Yellow, Pink, SkyBlue, Orange, Purple, White, Black, Grey, Brown);
         }
                
         /// <summary>
@@ -155,14 +152,13 @@ namespace ImageVideoProcessing
         /// <param name="White"></param>
         /// <param name="Black"></param>
         /// <returns></returns>
-        private List<ColorModel> GetUniqueColorList(List<string> colorList, int Red, int Blue, int Green, int Yellow, int Pink, int SkyBlue, int Orange, int Purple, int White, int Black,int Grey,int Brown, ref string colorNames)
+        private List<ColorModel> GetUniqueColorList(List<string> colorList, int Red, int Blue, int Green, int Yellow, int Pink, int SkyBlue, int Orange, int Purple, int White, int Black,int Grey,int Brown)
         {
             try
             {
                 if (!(colorList.Count() > 0))
                     return null;
-
-                colorNames = "";
+                
                 var colorKeyValuelist = new List<KeyValuePair<string, int>>();
                 List<ColorModel> cmList = new List<ColorModel>();
 
@@ -217,9 +213,11 @@ namespace ImageVideoProcessing
                     ColorModel cmObj = new ColorModel();
                     var colorValue = (from t in colorKeyValuelist where t.Key == colorObj.Key select t.Value).FirstOrDefault();
                     var percentage = Math.Round((Convert.ToDecimal(colorValue) / Convert.ToDecimal(totalColors)) * 100);
-                    if (percentage > 0)
-                        colorNames +="\r\n"+ colorObj.Key + " " + percentage + "%, ";
-
+                    if (!(percentage > 0))
+                    {
+                        continue;
+                    }
+                    
                     switch (colorObj.Key)
                     {
                         case "Red":                            
@@ -287,8 +285,7 @@ namespace ImageVideoProcessing
                             break;
                     }
                 }
-
-                colorNames.Remove(colorNames.Length - 2, 2);
+                 
                 return cmList;
             }
             catch (Exception)
