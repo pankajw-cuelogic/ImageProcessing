@@ -305,8 +305,8 @@ namespace ImageVideoProcessing
         {
             try
             {
-               
-                if ((R < 50 && G < 50 && B > 150)|| (B > 180 && G < 90 && R < 90) || (B > G & B > R && (B - R) > 25 && (B - G) > 25))
+
+                if ((R < 50 && G < 50 && B > 150) || (B > 180 && G < 90 && R < 90) || (B > G & B > R && (B - R) > 25 && (B - G) > 25))
                 {
                     return "Blue";
                 }
@@ -314,11 +314,11 @@ namespace ImageVideoProcessing
                 {
                     return "Green";
                 }
-                if (G > 180 && R > 180 && B < 90)
+                if ((G > 180 && R > 180 && B < 90) || (G > 220 && R > 220 && B < 150) || (G > 240 && R > 240 && B < 200))
                 {
                     return "Yellow";
                 }
-                if ( (R > 150 && G < 50 && B > 150)|| (R > 180 && B > 180 && G < 90))
+                if ((R > 150 && G < 50 && B > 150) || (R > 180 && B > 180 && G < 90))
                 {
                     return "Pink";
                 }
@@ -330,7 +330,7 @@ namespace ImageVideoProcessing
                 {
                     return "Orange";
                 }
-                if ( (R > 80 && R< 120 && G > 0 && G< 110 && B > 180)|| (B > 120 && (R > 80 && R < 170) && G < 100))
+                if ((R > 80 && R < 120 && G > 0 && G < 110 && B > 180) || (B > 120 && (R > 80 && R < 170) && G < 100))
                 {
                     return "Purple";
                 }
@@ -342,15 +342,15 @@ namespace ImageVideoProcessing
                 {
                     return "Black";
                 }
-                if ( (R > 70 && R< 120 && G < 50 && B < 50)|| (R>120&&R<210 && G > 60 && G < 150 && B > 40 && B < 120 && (R-G)>50 && (R - G) < 75) && (G-B) < 55 )
+                if ((R > 70 && R < 120 && G < 50 && B < 50) || (R > 120 && R < 210 && G > 60 && G < 150 && B > 40 && B < 120 && (R - G) > 50 && (R - G) < 75) && (G - B) < 55)
                 {
                     return "Brown";
                 }
-                if (R > 40 && R < 240 && G > 40 && G < 240 && B > 40 && B < 240)
+                if (R > 70 && R < 230 && G > 70 && G < 230 && B > 70 && B < 230)
                 {
                     return "Grey";
                 }
-                if ((R > 150 && G < 50 && B < 50) || (R > 180 && G < 90 && B < 90) || (R > G & R > B && (R - B) > 35 && (R - G) > 35))
+                if ((R > 220 && G < 140 && B < 140) || (R > 150 && G < 50 && B < 50) || (R > 180 && G < 90 && B < 90) || (R > G & R > B && (R - B) > 35 && (R - G) > 35))
                 {
                     return "Red";
                 }

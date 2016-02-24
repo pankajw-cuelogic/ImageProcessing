@@ -5,8 +5,8 @@ namespace ImageVideoGrabber
 {
     public interface IGrabber
     {
-        string ExtractTextFromImage(ImageFileInput fileNameObj);
-        List<ColorModel> GetImageColors(ImageFileInput imageInputObj);
+        ImageContent ExtractTextFromImage(ImageFileInput fileNameObj);
+        List<Colors> GetImageColors(ImageFileInput imageInputObj);
         VideoContent GetVideoDetails(VideoFileInput fileInputObj);
         List<DuplicateImageCheck> GetAllSimilarImages(DuplicateImageSearchPath fileName);
         AudioTextContent ConvertAudioToText(AudioInput audioFileObj);

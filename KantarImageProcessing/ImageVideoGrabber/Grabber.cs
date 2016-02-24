@@ -21,11 +21,12 @@ namespace ImageVideoGrabber
         /// </summary>
         /// <param name="fileNameObj">Accepts Objec of ImageFileInput</param>
         /// <returns></returns>
-        public string ExtractTextFromImage(ImageFileInput fileNameObj)
+        public ImageContent ExtractTextFromImage(ImageFileInput fileNameObj)
         {
             ImageContent ImageContent = new ImageContent();
             ImageContent.Content = imageGrab.ExtractTextFromImage(fileNameObj.FileName);
-            return JsonConvert.SerializeObject(ImageContent);
+            return ImageContent;
+            //return JsonConvert.SerializeObject(ImageContent);
         }
 
         /// <summary>
@@ -34,13 +35,33 @@ namespace ImageVideoGrabber
         /// </summary>
         /// <param name="imageInputObj">Accepts object of ImageFileInput</param>
         /// <returns>returns list of List<ColorModel> model</returns>
-        public List<ColorModel> GetImageColors(ImageFileInput imageInputObj)
+        public List<Colors> GetImageColors(ImageFileInput imageInputObj)
         {
             List<ColorModel> colorModel = imageGrab.GetImageColors(imageInputObj.FileName);
-            return colorModel;
+            return prepareColorModel( colorModel);
             //return JsonConvert.SerializeObject(colorModel);
         }
 
+        /// <summary>
+        /// Prepare color list model
+        /// </summary>
+        /// <param name="colorModel"></param>
+        /// <returns></returns>
+        private List<Colors> prepareColorModel(List<ColorModel> colorModel)
+        {
+            List<Colors> colorList = new List<Colors>();
+            if (colorModel.Count == 0)
+                return colorList;
+
+            foreach (var clr in colorModel)
+            {
+                Colors clrObj = new Colors();
+                clrObj.color = clr.color;
+                clrObj.pecentage = clrObj.pecentage;
+                colorList.Add(clrObj);
+            }
+            return colorList;
+        }
         #endregion
 
         #region Video Processing 
@@ -60,7 +81,7 @@ namespace ImageVideoGrabber
             videoContent.AudioMessage = audioMessage;
             videoContent.ContentMessage = contentMessage;
             videoContent.VideoInfo= videoInfo;
-            videoContent.ColorList = colorList;
+            videoContent.ColorList = prepareColorModel( colorList);
             return videoContent;
             //string jsonString = JsonConvert.SerializeObject(videoContent);
             //return jsonString;

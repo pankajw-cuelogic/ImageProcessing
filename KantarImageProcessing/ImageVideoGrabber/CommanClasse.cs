@@ -38,7 +38,7 @@ namespace ImageVideoGrabber
         public string ContentMessage { get; set; }
         public string VideoInfo { get; set; }
         public string AudioMessage { get; set; }
-        public  List<ColorModel> ColorList{get;set;}
+        public List<Colors> ColorList { get; set; }
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ namespace ImageVideoGrabber
     {
         public string Message { get; set; }
         public string FileNames { get; set; }
-        public string Percentage { get; set; } 
+        public string Percentage { get; set; }
     }
 
     /// <summary>
@@ -79,5 +79,14 @@ namespace ImageVideoGrabber
     public class AudioTextContent
     {
         public string AudioText { get; set; }
+    }
+
+    /// <summary>
+    /// Returns color list
+    /// </summary>
+    public class Colors
+    {
+        public string color { get; set; }
+        public int pecentage { get; set; }
     }
 }
