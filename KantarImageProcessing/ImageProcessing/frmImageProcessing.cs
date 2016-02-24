@@ -35,6 +35,7 @@ namespace ImageProcessing
         /// <param name="e"></param>
         private void btnProcess_Click(object sender, EventArgs e)
         {
+            Stub();
             if (!IsMediaFile(txtFilePath.Text.ToString().Trim(), imageExtensions))
             {
                 MessageBox.Show("Please select valid Image file!!");
@@ -351,7 +352,7 @@ namespace ImageProcessing
         public void Stub()
         {
             IGrabber imageGrab = new ImageVideoGrabber.Grabber();
-            ImageFileInput fileInput = new ImageFileInput();
+            ImageFile fileInput = new ImageFile();
             fileInput.FileName = txtFilePath.Text;
             //test1
              
@@ -359,11 +360,11 @@ namespace ImageProcessing
             var v = result;
             //test2
             fileInput.FileName = txtFilePath.Text; 
-            var result2= imageGrab.GetImageColors(fileInput);
+            List<Colors> result2= imageGrab.GetImageColors(fileInput);
             var v2 = result2;
 
             //test3
-            VideoFileInput videoFielOutput = new VideoFileInput();
+            VideoFile videoFielOutput = new VideoFile();
             string frameName = Guid.NewGuid().ToString();
             string outputImgFilePath = appStartPath + @"\bin\img\";
             string filePath = txtFilePath.Text.ToString().Trim();
@@ -379,7 +380,7 @@ namespace ImageProcessing
             var v3 = result3;
 
             //test4
-            DuplicateImageSearchPath ImageFileDupCheck = new DuplicateImageSearchPath();
+            DuplicateImagePath ImageFileDupCheck = new DuplicateImagePath();
             string targetDirPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\bin\img";
             ImageFileDupCheck.FilePath = txtFilePath.Text.ToString();
             ImageFileDupCheck.FileLength = 100000;

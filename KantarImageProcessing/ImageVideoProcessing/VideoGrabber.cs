@@ -41,12 +41,12 @@ namespace ImageVideoProcessing
                  //Start a process to execute batch file 
                  ProcessStartInfo psi = new ProcessStartInfo(batchFilePath);
                 psi.RedirectStandardOutput = true;
-                psi.WindowStyle = ProcessWindowStyle.Hidden;
-                psi.CreateNoWindow = true;
+               /// psi.WindowStyle = ProcessWindowStyle.Hidden;
+               /// psi.CreateNoWindow = true;
                 psi.UseShellExecute = false;
                 psi.Arguments = String.Format("{0},{1},{2} ", inputFilePath, infoFileName, frameName);
                 Process proc = new Process();
-                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+               /// proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 proc = Process.Start(psi);
                 proc.WaitForExit();
 
