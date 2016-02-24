@@ -104,13 +104,13 @@ namespace ImageProcessing
             string videoInfo = "";
             string audiMessage = "";
             string frameName = Guid.NewGuid().ToString();
-            string imagePoutputFolderPath = appStartPath + @"\bin\img\";
+            string imageOutputFolderPath = appStartPath + @"\bin\img\";
             string filePath = txtFilePath.Text.ToString().Trim();
             string batchFilePath = appStartPath + @"\ff-prompt.bat";
 
             try
             {
-                new ImageVideoProcessing.VideoGrabber().GetVideoDetails(appStartPath, imagePoutputFolderPath, filePath, batchFilePath, frameName, ref contentMessage, ref colorList, ref videoInfo, ref audiMessage);
+                new ImageVideoProcessing.VideoGrabber().GetVideoDetails(appStartPath, imageOutputFolderPath, filePath, batchFilePath, frameName, ref contentMessage, ref colorList, ref videoInfo, ref audiMessage);
                 txtColors.Text = "\t Video contains following major colors :\r\n"+ ParseColorList(colorList);
                 txtResult.Text = "\t Video contains following properties :" + videoInfo
                                     + "\r\n\r\n Content from video, frame by frame:\r\n" + contentMessage

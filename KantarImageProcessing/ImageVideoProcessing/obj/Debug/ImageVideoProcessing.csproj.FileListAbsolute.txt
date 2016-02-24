@@ -12,4 +12,3 @@ D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.csproj.ResolveComReference.cache
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.dll
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.pdb
-D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.csprojResolveAssemblyReference.cache

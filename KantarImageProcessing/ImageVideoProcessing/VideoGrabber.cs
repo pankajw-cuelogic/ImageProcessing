@@ -34,6 +34,8 @@ namespace ImageVideoProcessing
                 int audioDuration = 0;
                 string infoFileName = "fileInfo";
                 string videoPath = outputImagePath.Replace("\\img\\", "\\video\\");
+                CreateDirectoryIfNotExist(outputImagePath);
+                CreateDirectoryIfNotExist(videoPath);
                 DeleteAllFiles(outputImagePath);
 
                  //Start a process to execute batch file 
@@ -268,6 +270,18 @@ namespace ImageVideoProcessing
             }
             catch (Exception)
             {               
+            }
+        }
+
+        /// <summary>
+        /// Reason : To create directory if not exists
+        /// </summary>
+        /// <param name="FolderPath"></param>
+        private void CreateDirectoryIfNotExist(string FolderPath)
+        {
+            if (!System.IO.Directory.Exists(FolderPath))
+            {
+                System.IO.Directory.CreateDirectory(FolderPath);
             }
         }
         #endregion
