@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Speech.Recognition;
-using System.Windows.Forms;
-using System.Threading;
 using System.Diagnostics;
+using System.Speech.Recognition;
+using System.Threading;
 
 namespace ImageVideoProcessing
 {
     public class AudioGrabber
-    {
-        
+    {        
         #region SpeechRecognition for audio
         public Thread recThread;
         public Boolean recongnizerState = true;
@@ -21,12 +19,12 @@ namespace ImageVideoProcessing
         /// </summary>
         /// <param name="applicationStartupPath">Application startup path from where application is running</param>
         /// <param name="audioFolderPath">Audio file folder path</param>
-        /// <param name="frameName">Audio file name without extentions (extentions should be .wav file)</param>
-        /// <param name="audioDuration">Audi duration in seconds</param>
-        /// <param name="audioMessage">return audio message in reference variable</param>
+        /// <param name="frameName">Audio file name without extentions (extentions should be .wav file). FrameName should not contain extension</param>
+        /// <param name="audioDuration">Audio duration in seconds</param>
+        /// <param name="audioMessage">Return audio message in reference variable</param>
         public void ConvertAudioToText(string applicationStartupPath,string audioFolderPath,string frameName, int audioDuration, ref string audioMessage)
         {
-            //Break audio into #SECONDS sec parts
+            //Break audio into # SECONDS sec parts
             int startPointOfAudio = 0;
             int noOfAudioFiles = 1;
 
@@ -48,16 +46,16 @@ namespace ImageVideoProcessing
                 audioDuration -= 10;
             }
             //Get text for audio files
-            new AudioGrabber().speechToText(audioFolderPath + @"\" + frameName, noOfAudioFiles, ref audioMessage);
+            new AudioGrabber().SpeechToText(audioFolderPath + @"\" + frameName, noOfAudioFiles, ref audioMessage);
         }
 
         /// <summary>
         /// Reason : To get speech to text data for given no of files
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="audioFilePath"></param>
         /// <param name="noOfAudioFiles"></param>
         /// <param name="audioMessage"></param>
-        private void speechToText(string path,int noOfAudioFiles, ref string audioMessage)
+        private void SpeechToText(string audioFilePath,int noOfAudioFiles, ref string audioMessage)
         {
             SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
             Grammar dictationGrammar = new DictationGrammar();
@@ -66,14 +64,14 @@ namespace ImageVideoProcessing
             {
                 for (int i = 1; i < noOfAudioFiles; i++)
                 {
-                    recognizer.SetInputToWaveFile(path + i + ".wav");
+                    recognizer.SetInputToWaveFile(audioFilePath + i + ".wav");
                     RecognitionResult result = recognizer.Recognize();
                     audioMessage += "\r\n" + result.Text;
                 }
             }
             catch (InvalidOperationException)
             {
-                audioMessage = "Could not recognize input aduio.\r\n";
+                audioMessage = "Could not recognize input audio.\r\n";
             }
             finally
             {
@@ -83,11 +81,4 @@ namespace ImageVideoProcessing
 
         #endregion
     }
-}
-public class Word
-{
-    public Word() { }
-    public string Text { get; set; }
-    public string AttachedText { get; set; }
-    public bool IsShellCommand { get; set; }
 }

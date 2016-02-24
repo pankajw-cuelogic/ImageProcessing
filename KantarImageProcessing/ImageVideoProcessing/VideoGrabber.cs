@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace ImageVideoProcessing
 {
@@ -26,10 +25,11 @@ namespace ImageVideoProcessing
         /// <param name="colorMessage">Returns color density from video</param>
         /// <param name="videoInfo">Returns Metadata of video</param>
         /// <param name="audioMessage">Returns text from video</param>
-        public void GetVideoDetails(string applicationStartupPath, string outputImagePath, string inputFilePath, string batchFilePath, string frameName, ref string contentMessage, ref string colorMessage, ref string videoInfo, ref string audioMessage)
+        public void GetVideoDetails(string applicationStartupPath, string outputImagePath, string inputFilePath, string batchFilePath, string frameName, ref string contentMessage, ref List<ColorModel> colorList, ref string videoInfo, ref string audioMessage)
         {
             try
             {
+                colorList = new List<ColorModel>();
                 string duration = "";
                 int audioDuration = 0;
                 string infoFileName = "fileInfo";
@@ -48,7 +48,7 @@ namespace ImageVideoProcessing
                 proc = Process.Start(psi);
                 proc.WaitForExit();
 
-                GetFrameDetailsOfVideo(outputImagePath, frameName, ref contentMessage, ref colorMessage);
+                colorList = GetFrameDetailsOfVideo(outputImagePath, frameName, ref contentMessage);
                 GetVideoPropertyInfo(applicationStartupPath,infoFileName, ref videoInfo, ref duration);
                 GetDurationInSeconds(duration, ref audioDuration);
 
@@ -66,45 +66,48 @@ namespace ImageVideoProcessing
         /// <summary>
         /// Reason To Delete all files from give path
         /// </summary>
-        /// <param name="path"></param>
-        private void DeleteAllFiles(string path)
+        /// <param name="folderPath">folder path to delete all files from folder</param>
+        private void DeleteAllFiles(string folderPath)
         {
-            //Delete all existing files from directory
             try
             {
-                DirectoryInfo di = new DirectoryInfo(path);
+                DirectoryInfo di = new DirectoryInfo(folderPath);
                 foreach (FileInfo file in di.GetFiles())
                 { file.Delete(); }
                 foreach (DirectoryInfo dir in di.GetDirectories())
                 { dir.Delete(true); }
             }
             catch (Exception)
-            { }
+            {
+                throw new AccessViolationException();
+            }            
         }
+
         /// <summary>
         ///Reason : To get frame details from video 
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="extractedImageFolderPath"></param>
         /// <param name="contentMessage"></param>
         /// <param name="colorMessage"></param>
-        private void GetFrameDetailsOfVideo(string path, string frameName, ref string contentMessage, ref string colorMessage)
+        private List<ColorModel> GetFrameDetailsOfVideo(string extractedImageFolderPath, string frameName, ref string contentMessage )
         {
             try
             {
                 List<VideoDetails> videoDetailsList = new List<VideoDetails>();
                 List<ColorModel> colorList = new List<ColorModel>();
+                List<ColorModel> avgVideoColorList = new List<ColorModel>();
+
                 int i = 1;
                 string blankFrames = "";
                 string colorNames = "";
                 
-                var fileEntries = GetFilesFrom(path, imageFilters, false, frameName);
+                var fileEntries = GetFilesFrom(extractedImageFolderPath, imageFilters, false, frameName);
                 foreach (string fileName in fileEntries)
                 {
                     VideoDetails videoDetailsObj = new VideoDetails();
-                    videoDetailsObj.fileName = fileName;
+                    videoDetailsObj.FileName = fileName;
                     videoDetailsObj.Content = new ImageVideoProcessing.ImageGrabber().ExtractTextFromImage(fileName);
-
-                    colorList.AddRange(new ImageVideoProcessing.ImageGrabber().GetImageColors(fileName, ref colorNames));
+                    colorList.AddRange(new ImageVideoProcessing.ImageGrabber().GetImageColors(fileName));
 
                     videoDetailsObj.ColorDetails = colorNames;
                     if (videoDetailsObj.Content.Trim() != "")
@@ -123,14 +126,15 @@ namespace ImageVideoProcessing
                     colorPercentage = g.Average()
                 });
 
-                if (avgColorList.Count() > 0)
+                foreach (var clr in avgColorList)
                 {
-                    foreach (var x in avgColorList)
-                    {
-                        int percentage = Convert.ToInt32(Math.Round(x.colorPercentage));
-                        colorMessage += percentage != 0 ? " " + x.color + " : " + Convert.ToInt32(Math.Round(x.colorPercentage)) + "%\r\n" : "";
-                    }
+                    ColorModel colrMod = new ColorModel();
+                    colrMod.color = clr.color;
+                    colrMod.pecentage = Convert.ToInt32(Math.Round(clr.colorPercentage));
+                    avgVideoColorList.Add(colrMod);
                 }
+
+                return avgVideoColorList;
             }
             catch (Exception)
             {

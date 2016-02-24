@@ -1,0 +1,11 @@
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\ImageVideoGrabber.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\ImageVideoGrabber.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\ImageVideoProcessing.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\Newtonsoft.Json.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\Emgu.CV.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\Emgu.Util.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\ImageVideoProcessing.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\Newtonsoft.Json.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\obj\Debug\ImageVideoGrabber.csprojResolveAssemblyReference.cache
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\obj\Debug\ImageVideoGrabber.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\obj\Debug\ImageVideoGrabber.pdb

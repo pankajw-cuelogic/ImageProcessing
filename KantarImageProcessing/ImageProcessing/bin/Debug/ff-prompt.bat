@@ -20,14 +20,20 @@ echo foldername %3
 set input= %1
 set imgformat= "png"
 rem creating folder img in application startup path
-rem convert input video(% 1) to frmaes. for 1 sec 1 frame,  -r 1 : means rates of frame per second
+rem convert input video(% 1) to frames. for 1 sec 1 frame,  -r 1 : means rates of frame per second
+rem -r 0.25 -s means for 4 second 1 frame from video
+
+rem Command to extract frames from video with extention png
+
 ffmpeg -i %1 -r 0.25 -s 320x220 -f image2 -q 2 img\%3_%%05d.png
+
 rem ffmpeg -i video.avi -r 0.5 -f image2 output_%05d.jpg
 
 rem Extract audio from input video file
 rem ffmpeg -i %1 video\%3.mp3
 ffmpeg -i %1 video\%3.wav
 
+rem To write metadata of video into text file
 rem %2 if info file name
 @echo output start>%2.txt
 ffmpeg -i %1 2>>%2.txt

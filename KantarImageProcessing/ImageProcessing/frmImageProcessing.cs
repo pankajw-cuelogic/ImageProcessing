@@ -7,6 +7,9 @@ using System.IO;
 //using Emgu.CV.Structure;
 //using Emgu.CV.CvEnum;
 using ImageVideoProcessing;
+using ImageVideoGrabber;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace ImageProcessing
 {
@@ -40,13 +43,11 @@ namespace ImageProcessing
 
             DisposeControls();
             ShowLoader();
-            string colorNames = "";
-            string path = txtFilePath.Text.ToString();
-            //Cursor.Current = Cursors.WaitCursor;
-            
-            txtResult.Text = new ImageVideoProcessing.ImageGrabber().ExtractTextFromImage(path);
-            new ImageVideoProcessing.ImageGrabber().GetImageColors(path, ref colorNames);
-            txtColors.Text = "\tImage contains following major colors:"+ colorNames;
+            string imagePath = txtFilePath.Text.ToString();
+            string imageContent = new ImageVideoProcessing.ImageGrabber().ExtractTextFromImage(imagePath);
+            txtResult.Text = string.IsNullOrEmpty(imageContent) ? "There is no text found in Image" : imageContent;
+            txtColors.Text = "\tImage contains following major colors:" + ParseColorList(new ImageVideoProcessing.ImageGrabber().GetImageColors(imagePath));
+
             Cursor.Current = Cursors.AppStarting;
             HideLoader();
         }
@@ -98,19 +99,19 @@ namespace ImageProcessing
             ShowLoader();
             DisposeControls();
             flowLayoutPanel1.BringToFront();
+            List<ColorModel> colorList = new List<ColorModel>();
             string contentMessage = "";
-            string colorMessage = "";
             string videoInfo = "";
             string audiMessage = "";
             string frameName = Guid.NewGuid().ToString();
-            string path = appStartPath + @"\bin\img\";
+            string imagePoutputFolderPath = appStartPath + @"\bin\img\";
             string filePath = txtFilePath.Text.ToString().Trim();
             string batchFilePath = appStartPath + @"\ff-prompt.bat";
 
             try
             {
-                new ImageVideoProcessing.VideoGrabber().GetVideoDetails(appStartPath, path, filePath, batchFilePath, frameName, ref contentMessage, ref colorMessage, ref videoInfo, ref audiMessage);
-                txtColors.Text = "\t Video contains following major colors :\r\n"+ colorMessage;
+                new ImageVideoProcessing.VideoGrabber().GetVideoDetails(appStartPath, imagePoutputFolderPath, filePath, batchFilePath, frameName, ref contentMessage, ref colorList, ref videoInfo, ref audiMessage);
+                txtColors.Text = "\t Video contains following major colors :\r\n"+ ParseColorList(colorList);
                 txtResult.Text = "\t Video contains following properties :" + videoInfo
                                     + "\r\n\r\n Content from video, frame by frame:\r\n" + contentMessage
                                     + "\r\n\r\n Audio contains following text: \r\n" + audiMessage;
@@ -132,6 +133,26 @@ namespace ImageProcessing
                 HideLoader();
             }
         }
+
+        /// <summary>
+        /// To Parse list of color and return message
+        /// </summary>
+        /// <param name="colorList"></param>
+        /// <returns></returns>
+        public string ParseColorList(List<ColorModel> colorList)
+        {
+            string colorMessage = "";
+            if (colorList.Count() == 0)
+                return "There is no colors in Video";
+
+            foreach (var clr in colorList)
+            {
+                colorMessage += "\r\n" + clr.color + " : " + clr.pecentage +"%";
+            }
+
+            return colorMessage;
+        }
+
         public void DisposeControls()
         {
             foreach (Control control in flowLayoutPanel1.Controls)
@@ -168,8 +189,7 @@ namespace ImageProcessing
                 {
                     noOfFaces = 0;
                     newFrame = null;
-                    ///FaceDetect(files[i].FullName, ref noOfFaces, ref newFrame);
-
+                    new FaceDetection().DetectFace(appStartPath, files[i].FullName, ref noOfFaces, ref newFrame);
                     flws[i] = new FlowLayoutPanel();
                     flws[i].Name = "flw" + i;
                     flws[i].Location = new Point(3, brh);
@@ -211,49 +231,10 @@ namespace ImageProcessing
         {
             return -1 != Array.IndexOf(mediaExtensions, Path.GetExtension(path).ToUpperInvariant());
         }
-
-        #region Face Detection code
         
-        //private HaarCascade haar;
-        /*
-        private void FaceDetect(string path,ref int noOfFaces, ref Bitmap newFrame )
-        {
-            Bitmap bmp = (Bitmap)Image.FromFile(path);
-            using (Image<Bgr, byte> nextFrame = new Image<Bgr, Byte>(bmp))
-            {
-                if (nextFrame != null)
-                {
-                    // there's only one channel (greyscale), hence the zero index
-                    Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
-                    var faces =
-                            grayframe.DetectHaarCascade(
-                                    haar, 1.79, 4,
-                                    HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-                                    new Size(nextFrame.Width / 20, nextFrame.Height / 20)
-                                    )[0];
-                    noOfFaces = faces.Count();
-                    foreach (var face in faces)
-                    {
-                        nextFrame.Draw(face.rect, new Bgr(0, double.MaxValue, 0), 3);
-                    }
-                    newFrame = nextFrame.ToBitmap();
-                    pbImage.Image = nextFrame.ToBitmap();
-                    pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
-                    //pbImage.BringToFront();
-                }
-            }
-        }
-        */
-        private void LoadXML()
-        {
-            // haar = new HaarCascade(appStartPath + @"\haarcascade_frontalface_default.xml");
-        }
-        #endregion
-
         private void frmImageProcessing_Load(object sender, EventArgs e)
         {
             HideLoader();
-            LoadXML();
         }
 
         /// <summary>
@@ -269,7 +250,7 @@ namespace ImageProcessing
                 return;
             }
             ShowLoader();
-            new FaceDetection().FaceDetect(appStartPath, txtFilePath.Text.ToString(), ref noOfFaces, ref newFrame);
+            new FaceDetection().DetectFace(appStartPath, txtFilePath.Text.ToString(), ref noOfFaces, ref newFrame);
             HideLoader();
             pbImage.Image = newFrame;
             pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -277,7 +258,7 @@ namespace ImageProcessing
             MessageBox.Show("Selected Image contains "+ noOfFaces +" faces.");
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void DuplicateSearch_Click(object sender, EventArgs e)
         {
             if (!IsMediaFile(txtFilePath.Text.ToString().Trim(), imageExtensions))
             {
@@ -287,18 +268,23 @@ namespace ImageProcessing
 
             DisposeControls();
             ShowLoader();
-            string message = "";
-            string fileNames = "";
-            string percentage = "";
-            string targetDirPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\bin\img";
-            new DuplicateImageSearch().GetAllSimilarImages(txtFilePath.Text.ToString(), 100000, targetDirPath , ref message, ref fileNames, ref percentage);
-            txtResult.Text =message.Trim()!= "Following files are matches with selected image,"?message: "Selected Image not matched with any existing images";
-
-            if(fileNames.Trim()!="" && percentage.Trim() != "")
+            string message = "Following files are matches with selected image,\r\n";
+            double length = 100000;
+            string targetDirPath =appStartPath+  @"\bin\img";
+            List<DuplicateImageCheck> duplicateImageList = new List<DuplicateImageCheck>();
+            new DuplicateImageSearch().GetAllSimilarImages(txtFilePath.Text.ToString(), length, targetDirPath, ref duplicateImageList);
+            
+            if (duplicateImageList.Count() > 1)
             {
-                ShowAllFramesOnPanel(fileNames, percentage);
+                foreach (var x in duplicateImageList)
+                {
+                    message += "File Name : " + x.FileName +", Percentage : "+ x.Percentage +"\r\n\r\n";
+                }
+
+                ShowAllFramesOnPanel(duplicateImageList);
             }
 
+            txtResult.Text = message.Trim() != "Following files are matches with selected image," ? message : "Selected Image not matched with any existing images";
             HideLoader();
         }
 
@@ -307,22 +293,18 @@ namespace ImageProcessing
         /// </summary>
         /// <param name="imageName"></param>
         /// <param name="percentage"></param>
-        private void ShowAllFramesOnPanel( string imageName, string percentage)
+        private void ShowAllFramesOnPanel(List<DuplicateImageCheck> duplicateImageList)
         {
             flowLayoutPanel1.BringToFront();
             try
             {
-                string[] fileArray = imageName.Split(',');
-                string[] PercentageArray = percentage.Split(',');
-
-                int totalFiles = imageName.Split(',').Count();
+                int totalFiles = duplicateImageList.Count();
                 PictureBox[] pics = new PictureBox[totalFiles];
-                FlowLayoutPanel[] flws = new FlowLayoutPanel[totalFiles];
-                
+                FlowLayoutPanel[] flws = new FlowLayoutPanel[totalFiles];                
                 Label[] lbl = new Label[totalFiles];
 
                 int brh = 0;
-                for (int i = 0; i <= totalFiles; i++)
+                for (int i = 0; i < totalFiles; i++)
                 {
                     noOfFaces = 0;
                     newFrame = null;
@@ -335,14 +317,14 @@ namespace ImageProcessing
                     flws[i].BorderStyle = BorderStyle.Fixed3D;
 
                     lbl[i] = new Label();
-                    lbl[i].Name = PercentageArray[i];
+                    lbl[i].Name = duplicateImageList[i].Percentage;
                     lbl[i].Size = new Size(100, 35);
-                    lbl[i].Text = PercentageArray[i];
+                    lbl[i].Text = "Image matching percentage is " + duplicateImageList[i].Percentage;
 
                     pics[i] = new PictureBox();
-                    pics[i].Name = fileArray[i];
+                    pics[i].Name = duplicateImageList[i].FileName;
                     pics[i].Size = new Size(217, 175);
-                    pics[i].Image = System.Drawing.Image.FromFile(fileArray[i]);
+                    pics[i].Image = System.Drawing.Image.FromFile(duplicateImageList[i].FileName);
                     pics[i].SizeMode = PictureBoxSizeMode.StretchImage;
 
                     flws[i].Controls.Add(lbl[i]);
@@ -364,5 +346,48 @@ namespace ImageProcessing
         {
             pbLoading.Hide();
         }
+
+        #region Stub test code      
+        public void Stub()
+        {
+            IGrabber imageGrab = new ImageVideoGrabber.Grabber();
+            ImageFileInput fileInput = new ImageFileInput();
+            fileInput.FileName = txtFilePath.Text;
+            //test1
+             
+            var result = imageGrab.ExtractTextFromImage(fileInput);
+            var v = result;
+            //test2
+            fileInput.FileName = txtFilePath.Text; 
+            var result2= imageGrab.GetImageColors(fileInput);
+            var v2 = result2;
+
+            //test3
+            VideoFileInput videoFielOutput = new VideoFileInput();
+            string frameName = Guid.NewGuid().ToString();
+            string outputImgFilePath = appStartPath + @"\bin\img\";
+            string filePath = txtFilePath.Text.ToString().Trim();
+            string batchFilePath = appStartPath + @"\ff-prompt.bat";
+
+            videoFielOutput.ApplicationStartupPath = appStartPath;
+            videoFielOutput.OutputImagePath = outputImgFilePath;
+            videoFielOutput.InputFilePath = filePath;
+            videoFielOutput.BatchFilePath = batchFilePath;
+            videoFielOutput.FrameName = frameName;                       
+             
+            var result3 = imageGrab.GetVideoDetails(videoFielOutput);
+            var v3 = result3;
+
+            //test4
+            DuplicateImageSearchPath ImageFileDupCheck = new DuplicateImageSearchPath();
+            string targetDirPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\bin\img";
+            ImageFileDupCheck.FilePath = txtFilePath.Text.ToString();
+            ImageFileDupCheck.FileLength = 100000;
+            ImageFileDupCheck.FolderPath = targetDirPath;
+            
+            var result4 = imageGrab.GetAllSimilarImages(ImageFileDupCheck);
+            var v4 = result4;   
+        }
+        #endregion 
     }
 }

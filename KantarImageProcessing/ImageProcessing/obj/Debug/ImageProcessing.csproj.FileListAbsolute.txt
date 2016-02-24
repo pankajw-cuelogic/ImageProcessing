@@ -15,3 +15,7 @@ D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\Imag
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\obj\Debug\ImageProcessing.pdb
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\Emgu.CV.dll
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\Emgu.Util.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\ImageVideoGrabber.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\Newtonsoft.Json.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\ImageVideoGrabber.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\Newtonsoft.Json.xml

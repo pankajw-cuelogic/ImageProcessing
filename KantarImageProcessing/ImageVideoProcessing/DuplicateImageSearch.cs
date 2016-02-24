@@ -16,48 +16,46 @@ namespace ImageVideoProcessing
         /// Reason : To get all similar files from folder with percentage of similarity for selected file.
         /// compare files from folder which are having length of file +- 100000 of original file.
         /// </summary>
-        /// <param name="filePath">Input file path of image</param>
+        /// <param name="inputFilePath">Input file path of image</param>
         /// <param name="length">Length of image file that varies to compare with another file</param>
         /// <param name="folderPath">Folder location where to search duplocate files</param>
         /// <param name="message">return message in reference variable for no of matches</param>
         /// <param name="fileNames">returns names of files which are matched in target flder seperated by comma(,)</param>
         /// <param name="percentageString"> returns percentage of similarities of matched images in string seperated by comma(,)</param>
-        public void GetAllSimilarImages(string filePath,double length, string folderPath, ref string message, ref string fileNames, ref string percentageString)
+        public void GetAllSimilarImages(string inputFilePath,double length, string folderPath, ref List<DuplicateImageCheck> duplicateImageList)
         {
             {
                 try
                 {
-                    fileNames += filePath + ",";
-                    percentageString += "Original file,";
+                    DuplicateImageCheck imgOriginalFile = new DuplicateImageCheck();
+                    imgOriginalFile.FileName = inputFilePath;
+                    imgOriginalFile.Percentage = "Original Selected File";
+                    duplicateImageList.Add(imgOriginalFile);
 
                     Boolean flag = false;
                     int count = 0; int percentage = 0;
-                    message = "Following files are matches with selected image,\r\n";
-                    FileInfo fileInnfo = new FileInfo(filePath);
-
+                    FileInfo fileInfo = new FileInfo(inputFilePath);
                     DirectoryInfo directory = new DirectoryInfo(folderPath);
                     FileInfo[] files = directory.GetFiles("*.*", SearchOption.AllDirectories);
-
-                    var fileEntries = GetFilesFrom(folderPath, imageFilters, false);
-
+                                                            
                     var query = from file in files
-                                where file.Length > fileInnfo.Length - length && file.Length < fileInnfo.Length + length
+                                where (file.Length > fileInfo.Length - length && file.Length < fileInfo.Length + length)
+                                && file.Name != inputFilePath
                                 select file;
 
-                    foreach (FileInfo fileInfo in query)
+                    foreach (FileInfo infoObj in query)
                     {
                         flag = false;
-                        CompareImages(filePath, fileInfo.FullName, ref flag, ref percentage);
+                        CompareImages(inputFilePath, infoObj.FullName, ref flag, ref percentage);
                         if (flag)
                         {
+                            DuplicateImageCheck imgDupCheck = new DuplicateImageCheck();                           
+                            imgDupCheck.FileName = infoObj.FullName;
+                            imgDupCheck.Percentage = percentage + "%";
+                            duplicateImageList.Add(imgDupCheck);
                             count++;
-                            message += "File " + count + ": " + fileInfo.FullName + ", Percentage : " + percentage + "%\r\n\r\n";
-                            fileNames += fileInfo.FullName + ",";
-                            percentageString +="Image matching percentage is " +percentage + "%,";
                         }
-                    }
-                    if (count > 0)
-                        message = "Selected Image Match with " + count + " Images in target folder\r\n\r\n" + message;                    
+                    }               
                 }
                 catch (Exception ex)
                 {
