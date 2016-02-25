@@ -6,10 +6,11 @@ namespace ImageVideoGrabber
     /// <summary>
     /// ImageFileInput : To accept Image input file name
     /// </summary>
-    public class ImageFileInput
+    public class ImageFile
     {
         public string FileName { get; set; }
     }
+
     /// <summary>
     /// ImageContent : To return content of image
     /// </summary>
@@ -21,13 +22,12 @@ namespace ImageVideoGrabber
     /// <summary>
     /// VideoFileInput : Model  to take video file input
     /// </summary>
-    public class VideoFileInput
+    public class VideoFile
     {
         public string ApplicationStartupPath { get; set; }
         public string OutputImagePath { get; set; }
         public string InputFilePath { get; set; }
         public string BatchFilePath { get; set; }
-        public string FrameName { get; set; }
     }
 
     /// <summary>
@@ -44,24 +44,14 @@ namespace ImageVideoGrabber
     /// <summary>
     /// DuplicateSearchImagePath : Model to take Image path to search duplicate images in specified folder
     /// </summary>
-    public class DuplicateImageSearchPath
+    public class DuplicateImagePath
     {
         public string FilePath { get; set; }
         public double FileLength { get; set; }
         public string FolderPath { get; set; }
         public string Message { get; set; }
     }
-
-    /// <summary>
-    /// DuplicateImageSearchOutput : Model to return result of duplicate image check
-    /// </summary>
-    public class DuplicateImageSearchOutput
-    {
-        public string Message { get; set; }
-        public string FileNames { get; set; }
-        public string Percentage { get; set; }
-    }
-
+     
     /// <summary>
     /// AudioInput : Model to take details of Audio input file
     /// </summary>
@@ -86,7 +76,13 @@ namespace ImageVideoGrabber
     /// </summary>
     public class Colors
     {
-        public string color { get; set; }
-        public int pecentage { get; set; }
+        public string Color { get; set; }
+        public int Pecentage { get; set; }
+    }
+
+    public class DuplicateImages
+    {
+        public string FileName { get; set; }
+        public string Percentage { get; set; }
     }
 }

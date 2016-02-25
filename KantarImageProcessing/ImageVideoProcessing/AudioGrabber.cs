@@ -33,10 +33,11 @@ namespace ImageVideoProcessing
             psiAudioBreak.WindowStyle = ProcessWindowStyle.Hidden;
             psiAudioBreak.CreateNoWindow = true;
             psiAudioBreak.UseShellExecute = false;
+            string audioFilePath = String.Format("\"{0}\"", audioFolderPath + @"\" + frameName + ".wav");
 
             for (noOfAudioFiles = 1; audioDuration > 0; noOfAudioFiles++)
             {
-                psiAudioBreak.Arguments = String.Format("{0},{1},{2},{3} ", audioFolderPath + @"\" + frameName + ".wav", startPointOfAudio,
+                psiAudioBreak.Arguments = String.Format("{0},{1},{2},{3} ", audioFilePath, startPointOfAudio,
                     audioDuration > 10 ? 10 : audioDuration, frameName + noOfAudioFiles + ".wav");
                 Process procAudioBreak = new Process();
                 procAudioBreak.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;

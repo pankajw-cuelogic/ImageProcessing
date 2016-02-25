@@ -1,15 +1,14 @@
-﻿using System;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using System.IO;
+﻿using ImageVideoGrabber;
 //using Emgu.CV;
 //using Emgu.CV.Structure;
 //using Emgu.CV.CvEnum;
 using ImageVideoProcessing;
-using ImageVideoGrabber;
-using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ImageProcessing
 {
@@ -18,7 +17,7 @@ namespace ImageProcessing
         #region Global Declarations
 
         string[] videoExtensions = { ".AVI", ".MP4", ".DIVX", ".WMV", ".MKV",".3GP" };
-        string[] imageExtensions = { ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF" };
+        string[] imageExtensions = { ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF", ".TIF" };
         int noOfFaces = 0;
         Bitmap newFrame = null;
         string appStartPath = Application.StartupPath;
@@ -35,6 +34,7 @@ namespace ImageProcessing
         /// <param name="e"></param>
         private void btnProcess_Click(object sender, EventArgs e)
         {
+            Stub();
             if (!IsMediaFile(txtFilePath.Text.ToString().Trim(), imageExtensions))
             {
                 MessageBox.Show("Please select valid Image file!!");
@@ -351,7 +351,7 @@ namespace ImageProcessing
         public void Stub()
         {
             IGrabber imageGrab = new ImageVideoGrabber.Grabber();
-            ImageFileInput fileInput = new ImageFileInput();
+            ImageFile fileInput = new ImageFile();
             fileInput.FileName = txtFilePath.Text;
             //test1
              
@@ -359,11 +359,11 @@ namespace ImageProcessing
             var v = result;
             //test2
             fileInput.FileName = txtFilePath.Text; 
-            var result2= imageGrab.GetImageColors(fileInput);
+            List<Colors> result2= imageGrab.GetImageColors(fileInput);
             var v2 = result2;
 
             //test3
-            VideoFileInput videoFielOutput = new VideoFileInput();
+            VideoFile videoFielOutput = new VideoFile();
             string frameName = Guid.NewGuid().ToString();
             string outputImgFilePath = appStartPath + @"\bin\img\";
             string filePath = txtFilePath.Text.ToString().Trim();
@@ -372,14 +372,13 @@ namespace ImageProcessing
             videoFielOutput.ApplicationStartupPath = appStartPath;
             videoFielOutput.OutputImagePath = outputImgFilePath;
             videoFielOutput.InputFilePath = filePath;
-            videoFielOutput.BatchFilePath = batchFilePath;
-            videoFielOutput.FrameName = frameName;                       
+            videoFielOutput.BatchFilePath = batchFilePath;          
              
             var result3 = imageGrab.GetVideoDetails(videoFielOutput);
             var v3 = result3;
 
             //test4
-            DuplicateImageSearchPath ImageFileDupCheck = new DuplicateImageSearchPath();
+            DuplicateImagePath ImageFileDupCheck = new DuplicateImagePath();
             string targetDirPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\bin\img";
             ImageFileDupCheck.FilePath = txtFilePath.Text.ToString();
             ImageFileDupCheck.FileLength = 100000;
