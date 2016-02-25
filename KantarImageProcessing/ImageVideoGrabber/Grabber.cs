@@ -1,5 +1,6 @@
 ﻿using ImageVideoProcessing;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace ImageVideoGrabber
@@ -26,7 +27,6 @@ namespace ImageVideoGrabber
             ImageContent ImageContent = new ImageContent();
             ImageContent.Content = imageGrab.ExtractTextFromImage(fileNameObj.FileName);
             return ImageContent;
-            //return JsonConvert.SerializeObject(ImageContent);
         }
 
         /// <summary>
@@ -39,7 +39,6 @@ namespace ImageVideoGrabber
         {
             List<ColorModel> colorModel = imageGrab.GetImageColors(imageInputObj.FileName);
             return PrepareColorModel( colorModel);
-            //return JsonConvert.SerializeObject(colorModel);
         }
 
         /// <summary>
@@ -73,18 +72,23 @@ namespace ImageVideoGrabber
         /// <returns>object of VideoContent</returns>
         public VideoContent GetVideoDetails(VideoFile fileInputObj)
         {
-            VideoContent videoContent = new VideoContent();
-            List<ColorModel> colorList = new List<ColorModel>();
-            string contentMessage = ""; string videoInfo = ""; string audioMessage = "";
-            videoGrab.GetVideoDetails(fileInputObj.ApplicationStartupPath, fileInputObj.OutputImagePath, fileInputObj.InputFilePath, fileInputObj.BatchFilePath, fileInputObj.FrameName, ref contentMessage, ref colorList, ref videoInfo, ref audioMessage);
+            try
+            {
+                VideoContent videoContent = new VideoContent();
+                List<ColorModel> colorList = new List<ColorModel>();
+                string contentMessage = ""; string videoInfo = ""; string audioMessage = "";
+                videoGrab.GetVideoDetails(fileInputObj.ApplicationStartupPath, fileInputObj.OutputImagePath, fileInputObj.InputFilePath, fileInputObj.BatchFilePath, Guid.NewGuid().ToString(), ref contentMessage, ref colorList, ref videoInfo, ref audioMessage);
 
-            videoContent.AudioMessage = audioMessage;
-            videoContent.ContentMessage = contentMessage;
-            videoContent.VideoInfo= videoInfo;
-            videoContent.ColorList = PrepareColorModel( colorList);
-            return videoContent;
-            //string jsonString = JsonConvert.SerializeObject(videoContent);
-            //return jsonString;
+                videoContent.AudioMessage = audioMessage;
+                videoContent.ContentMessage = contentMessage;
+                videoContent.VideoInfo = videoInfo;
+                videoContent.ColorList = PrepareColorModel(colorList);
+                return videoContent;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         #endregion
@@ -96,18 +100,18 @@ namespace ImageVideoGrabber
         /// compare files from folder which are having length of file +- 100000 of original file.
         /// </summary>
         /// <param name=">model DuplicateImageSearchPath requires following Input parameter list</param>
-        /// <param name="filePath">Input file path of image</param>
-        /// <param name="length">Length of image file that varies to compare with another file</param>
-        /// <param name="folderPath">Folder location where to search duplocate files</param>
-        /// <param name="message">return message in reference variable for no of matches</param>
-        /// <param name="fileNames">returns names of files which are matched in target flder seperated by comma(,)</param>
-        /// <param name="percentageString"> returns percentage of similarities of matched images in string seperated by comma(,)</param>
         public List<DuplicateImages> GetAllSimilarImages(DuplicateImagePath duplicateImageInputObj)
         {
-            List<DuplicateImageCheck> duplicateImageList = new List<DuplicateImageCheck>();    
-            dupSearch.GetAllSimilarImages(duplicateImageInputObj.FilePath, duplicateImageInputObj.FileLength, duplicateImageInputObj.FolderPath, ref duplicateImageList);
-            return PrepareDuplicateFileModel( duplicateImageList);
-            //return JsonConvert.SerializeObject(duplicateImageList);
+            try
+            {
+                List<DuplicateImageCheck> duplicateImageList = new List<DuplicateImageCheck>();
+                dupSearch.GetAllSimilarImages(duplicateImageInputObj.FilePath, duplicateImageInputObj.FileLength, duplicateImageInputObj.FolderPath, ref duplicateImageList);
+                return PrepareDuplicateFileModel(duplicateImageList);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         /// <summary>
         /// Prepare color list model
@@ -116,30 +120,43 @@ namespace ImageVideoGrabber
         /// <returns></returns>
         private List<DuplicateImages> PrepareDuplicateFileModel(List<DuplicateImageCheck> duplicateImagesModel)
         {
-            List<DuplicateImages> duplicateImagesList = new List<DuplicateImages>();
-            if (duplicateImagesModel.Count == 0)
-                return duplicateImagesList;
-
-            foreach (var clr in duplicateImagesModel)
+            try
             {
-                DuplicateImages DuplicateImagesObj = new DuplicateImages();
-                DuplicateImagesObj.FileName = clr.FileName;
-                DuplicateImagesObj.Percentage = clr.Percentage;
-                duplicateImagesList.Add(DuplicateImagesObj);
+                List<DuplicateImages> duplicateImagesList = new List<DuplicateImages>();
+                if (duplicateImagesModel.Count == 0)
+                    return duplicateImagesList;
+
+                foreach (var clr in duplicateImagesModel)
+                {
+                    DuplicateImages DuplicateImagesObj = new DuplicateImages();
+                    DuplicateImagesObj.FileName = clr.FileName;
+                    DuplicateImagesObj.Percentage = clr.Percentage;
+                    duplicateImagesList.Add(DuplicateImagesObj);
+                }
+                return duplicateImagesList;
             }
-            return duplicateImagesList;
+            catch (Exception)
+            {
+                throw;
+            }
         }
         #endregion
 
         #region Audio to Text
         public AudioTextContent ConvertAudioToText(AudioInput audioFileObj)
         {
-            AudioTextContent audioOutput = new AudioTextContent();
-            string textMessage = ""; 
-            audioGrab.ConvertAudioToText(audioFileObj.ApplicationStartupPath, audioFileObj.AudioFolderPath, audioFileObj.FrameName, audioFileObj.AudioDuration, ref textMessage);
-            audioOutput.AudioText = textMessage;
-            return audioOutput;
-            //return JsonConvert.SerializeObject(audioOutput);
+            try
+            {
+                AudioTextContent audioOutput = new AudioTextContent();
+                string textMessage = "";
+                audioGrab.ConvertAudioToText(audioFileObj.ApplicationStartupPath, audioFileObj.AudioFolderPath, audioFileObj.FrameName, audioFileObj.AudioDuration, ref textMessage);
+                audioOutput.AudioText = textMessage;
+                return audioOutput;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         #endregion

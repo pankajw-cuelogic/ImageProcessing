@@ -28,7 +28,6 @@ namespace ImageVideoGrabber
         public string OutputImagePath { get; set; }
         public string InputFilePath { get; set; }
         public string BatchFilePath { get; set; }
-        public string FrameName { get; set; }
     }
 
     /// <summary>

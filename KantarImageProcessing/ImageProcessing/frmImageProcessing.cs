@@ -1,15 +1,14 @@
-﻿using System;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using System.IO;
+﻿using ImageVideoGrabber;
 //using Emgu.CV;
 //using Emgu.CV.Structure;
 //using Emgu.CV.CvEnum;
 using ImageVideoProcessing;
-using ImageVideoGrabber;
-using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ImageProcessing
 {
@@ -18,7 +17,7 @@ namespace ImageProcessing
         #region Global Declarations
 
         string[] videoExtensions = { ".AVI", ".MP4", ".DIVX", ".WMV", ".MKV",".3GP" };
-        string[] imageExtensions = { ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF" };
+        string[] imageExtensions = { ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF", ".TIF" };
         int noOfFaces = 0;
         Bitmap newFrame = null;
         string appStartPath = Application.StartupPath;
@@ -373,8 +372,7 @@ namespace ImageProcessing
             videoFielOutput.ApplicationStartupPath = appStartPath;
             videoFielOutput.OutputImagePath = outputImgFilePath;
             videoFielOutput.InputFilePath = filePath;
-            videoFielOutput.BatchFilePath = batchFilePath;
-            videoFielOutput.FrameName = frameName;                       
+            videoFielOutput.BatchFilePath = batchFilePath;          
              
             var result3 = imageGrab.GetVideoDetails(videoFielOutput);
             var v3 = result3;

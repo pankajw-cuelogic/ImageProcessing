@@ -10,17 +10,17 @@ ffmpeg version N-78313-g6632802 Copyright (c) 2000-2016 the FFmpeg developers
   libswscale      4.  0.100 /  4.  0.100
   libswresample   2.  0.101 /  2.  0.101
   libpostproc    54.  0.100 / 54.  0.100
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'D:\videos\bill3.mp4':
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'D:\videos\a b\fsdfh fbdjf dfdpo\a\New folder\ckt.mp4':
   Metadata:
     major_brand     : isom
     minor_version   : 512
     compatible_brands: isomiso2avc1mp41
     encoder         : Lavf57.24.100
-  Duration: 00:02:00.05, start: 0.046440, bitrate: 169 kb/s
-    Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 176x144 [SAR 1:1 DAR 11:9], 94 kb/s, 12 fps, 12 tbr, 12288 tbn, 24 tbc (default)
+  Duration: 00:01:00.05, start: 0.046440, bitrate: 321 kb/s
+    Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 320x240 [SAR 1:1 DAR 4:3], 208 kb/s, 25 fps, 25 tbr, 12800 tbn, 50 tbc (default)
     Metadata:
       handler_name    : VideoHandler
-    Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 22050 Hz, mono, fltp, 72 kb/s (default)
+    Stream #0:1(eng): Audio: aac (LC) (mp4a / 0x6134706D), 22050 Hz, mono, fltp, 108 kb/s (default)
     Metadata:
       handler_name    : SoundHandler
 At least one output file must be specified
