@@ -34,7 +34,6 @@ namespace ImageProcessing
         /// <param name="e"></param>
         private void btnProcess_Click(object sender, EventArgs e)
         {
-            Stub();
             if (!IsMediaFile(txtFilePath.Text.ToString().Trim(), imageExtensions))
             {
                 MessageBox.Show("Please select valid Image file!!");

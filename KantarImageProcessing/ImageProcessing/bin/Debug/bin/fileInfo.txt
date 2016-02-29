@@ -10,7 +10,7 @@ ffmpeg version N-78313-g6632802 Copyright (c) 2000-2016 the FFmpeg developers
   libswscale      4.  0.100 /  4.  0.100
   libswresample   2.  0.101 /  2.  0.101
   libpostproc    54.  0.100 / 54.  0.100
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'D:\videos\a b\fsdfh fbdjf dfdpo\a\New folder\ckt.mp4':
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'D:\videos\crkt_cut5.mp4':
   Metadata:
     major_brand     : isom
     minor_version   : 512
