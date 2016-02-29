@@ -16,7 +16,7 @@ namespace ImageProcessing
     {
         #region Global Declarations
 
-        string[] videoExtensions = { ".AVI", ".MP4", ".DIVX", ".WMV", ".MKV",".3GP" };
+        string[] videoExtensions = { ".AVI", ".MP4", ".DIVX", ".WMV", ".MKV",".3GP", ".FLV" };
         string[] imageExtensions = { ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF", ".TIF" };
         int noOfFaces = 0;
         Bitmap newFrame = null;

@@ -69,7 +69,7 @@ namespace ImageVideoProcessing
         /// <returns>returns color model</returns>
         public List<ColorModel> GetImageColors(string fileName)
         {
-            Boolean val = IsLocalPath(fileName);
+            Boolean val = new CommanImplementation(). IsLocalPath(fileName);
             Bitmap bmp = null;
             if (!val)
             {
@@ -159,11 +159,6 @@ namespace ImageVideoProcessing
         /// <param name="fileName"></param>
         private static void DownloadRemoteImageFile(string uri, string fileName)
         {
-
-            //using (WebClient client = new WebClient())
-            //{
-            //    client.DownloadFile("http://iloverelationship.com/wp-content/uploads/2013/10/Romantic-Love-Text-Quotes-For-Boyfriend-And-Girlfriend-300x232.jpg", fileName);
-            //}
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
@@ -172,8 +167,7 @@ namespace ImageVideoProcessing
             // image file might be redirected to a 404-page, which would
             // yield the StatusCode "OK", even though the image was not
             // found.
-            if ((response.StatusCode == HttpStatusCode.OK ||
-                response.StatusCode == HttpStatusCode.Moved ||
+            if ((response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Moved ||
                 response.StatusCode == HttpStatusCode.Redirect) &&
                 response.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase))
             {
@@ -417,16 +411,6 @@ namespace ImageVideoProcessing
             {
                 throw;
             }
-        }
-
-        /// <summary>
-        /// Reason : To check input path is local or uri
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        private static bool IsLocalPath(string filePath)
-        {
-            return new Uri(filePath).IsFile;
         }
 
         #endregion

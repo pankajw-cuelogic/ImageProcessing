@@ -69,7 +69,8 @@
   <ItemGroup>
     <Compile Include="AudioGrabber.cs" />
     <Compile Include="ColorModel.cs" />
-    <Compile Include="CommanModelClass.cs" />
+    <Compile Include="CommanImplementation.cs" />
+    <Compile Include="ModelClasses.cs" />
     <Compile Include="DuplicateImageSearch.cs" />
     <Compile Include="FaceDetection.cs" />
     <Compile Include="ImageGrabber.cs" />
