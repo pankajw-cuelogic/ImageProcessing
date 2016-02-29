@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Speech.Recognition;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ImageVideoProcessing
 {
@@ -10,6 +11,9 @@ namespace ImageVideoProcessing
         #region SpeechRecognition for audio
         public Thread recThread;
         public Boolean recongnizerState = true;
+        public string audioContentMessage ;
+        TimeSpan timeSpan = new TimeSpan(0, 0, 10);
+        SpeechRecognitionEngine recognizer = null;
         #endregion
 
         #region Speech Recognition for wav file
@@ -58,17 +62,25 @@ namespace ImageVideoProcessing
         /// <param name="audioMessage"></param>
         private void SpeechToText(string audioFilePath,int noOfAudioFiles, ref string audioMessage)
         {
-            SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
+            recognizer = new SpeechRecognitionEngine();
             Grammar dictationGrammar = new DictationGrammar();
             recognizer.LoadGrammar(dictationGrammar);
+            audioContentMessage = "";
             try
             {
                 for (int i = 1; i < noOfAudioFiles; i++)
                 {
-                    recognizer.SetInputToWaveFile(audioFilePath + i + ".wav");
-                    RecognitionResult result = recognizer.Recognize();
-                    audioMessage += "\r\n" + result.Text;
+                    try
+                    {
+                        Task task = Task.Factory.StartNew(() => codeBlock(audioFilePath + i + ".wav", noOfAudioFiles, recognizer));
+                        task.Wait(timeSpan);
+                    }
+                    catch
+                    {
+                    }
                 }
+
+                audioMessage = audioContentMessage;
             }
             catch (InvalidOperationException)
             {
@@ -77,6 +89,25 @@ namespace ImageVideoProcessing
             finally
             {
                 recognizer.UnloadAllGrammars();
+            }
+        }
+
+        /// <summary>
+        /// Recognize method has not handle exception if audio is not in video file and it goes in while loop. to overcome this join main thread if it not returns in specific time
+        /// </summary>
+        /// <param name="audioFilePath"></param>
+        /// <param name="noOfAudioFiles"></param>
+        /// <param name="recognizer"></param>
+        private void codeBlock(string audioFilePath, int noOfAudioFiles, SpeechRecognitionEngine recognizer)
+        {
+            try
+            {
+                recognizer.SetInputToWaveFile(audioFilePath);
+                RecognitionResult result = recognizer.Recognize(timeSpan);
+                audioContentMessage += "\r\n" + result.Text;
+            }
+            catch (Exception)
+            {
             }
         }
 
