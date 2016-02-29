@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 
 namespace ImageVideoProcessing
@@ -67,7 +69,20 @@ namespace ImageVideoProcessing
         /// <returns>returns color model</returns>
         public List<ColorModel> GetImageColors(string fileName)
         {
-            Bitmap bmp = new Bitmap(fileName);
+            Boolean val = IsLocalPath(fileName);
+            Bitmap bmp = null;
+            if (!val)
+            {
+                WebClient l_WebClient = new WebClient();
+                byte[] l_imageBytes = l_WebClient.DownloadData(fileName);
+                MemoryStream l_stream = new MemoryStream(l_imageBytes);
+                System.Drawing.Image.FromStream(l_stream);
+                bmp = new Bitmap(System.Drawing.Image.FromStream(l_stream));
+            }
+            else {
+                bmp = new Bitmap(fileName);
+            }
+
             HashSet<string> colors = new HashSet<string>();
             List<string> colorList = new List<string>();
             int Red = 0, Blue = 0, Green = 0, Yellow = 0, Pink = 0, SkyBlue = 0, Orange = 0, Purple = 0, White = 0, Black = 0, Grey=0,Brown=0;
@@ -136,7 +151,48 @@ namespace ImageVideoProcessing
             }
             return GetUniqueColorList(colorList, Red, Blue, Green, Yellow, Pink, SkyBlue, Orange, Purple, White, Black, Grey, Brown);
         }
-               
+        
+        /// <summary>
+        /// Download remote image
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="fileName"></param>
+        private static void DownloadRemoteImageFile(string uri, string fileName)
+        {
+
+            //using (WebClient client = new WebClient())
+            //{
+            //    client.DownloadFile("http://iloverelationship.com/wp-content/uploads/2013/10/Romantic-Love-Text-Quotes-For-Boyfriend-And-Girlfriend-300x232.jpg", fileName);
+            //}
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            // Check that the remote file was found. The ContentType
+            // check is performed since a request for a non-existent
+            // image file might be redirected to a 404-page, which would
+            // yield the StatusCode "OK", even though the image was not
+            // found.
+            if ((response.StatusCode == HttpStatusCode.OK ||
+                response.StatusCode == HttpStatusCode.Moved ||
+                response.StatusCode == HttpStatusCode.Redirect) &&
+                response.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase))
+            {
+
+                // if the remote file was found, download oit
+                using (Stream inputStream = response.GetResponseStream())
+                using (Stream outputStream = File.OpenWrite(fileName))
+                {
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+                    do
+                    {
+                        bytesRead = inputStream.Read(buffer, 0, buffer.Length);
+                        outputStream.Write(buffer, 0, bytesRead);
+                    } while (bytesRead != 0);
+                }
+            }
+        }
+       
         /// <summary>
         /// Reason : To get distinct colors from list with their dencity
         /// </summary>
@@ -362,7 +418,18 @@ namespace ImageVideoProcessing
                 throw;
             }
         }
-        #endregion       
-                
-    }    
+
+        /// <summary>
+        /// Reason : To check input path is local or uri
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        private static bool IsLocalPath(string filePath)
+        {
+            return new Uri(filePath).IsFile;
+        }
+
+        #endregion
+
+    }
 }
