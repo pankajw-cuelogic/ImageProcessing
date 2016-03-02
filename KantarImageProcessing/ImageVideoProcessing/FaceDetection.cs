@@ -4,6 +4,8 @@ using Emgu.CV.Structure;
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ImageVideoProcessing
 {
@@ -12,9 +14,12 @@ namespace ImageVideoProcessing
         #region Global Declaration
 
         private HaarCascade haar;
-        
-        #endregion
 
+        #endregion
+        public FaceDetection(string FaceDetection)
+        {
+            LoadXML(FaceDetection);
+        }
         #region Face Detection code
 
         /// <summary>
@@ -53,10 +58,38 @@ namespace ImageVideoProcessing
         /// To load grammer of speech to text
         /// </summary>
         /// <param name="haarcascadeFilePath"></param>
-        private void LoadXML(string haarcascadeFilePath)
+        public void LoadXML(string haarcascadeFilePath)
         {
             haar = new HaarCascade(haarcascadeFilePath+ @"\haarcascade_frontalface_default.xml");
         }
+
+        /// <summary>
+        /// To check no of faces in image
+        /// </summary>
+        /// <param name="appStartPath"></param>
+        /// <param name="inputFilePath"></param>
+        /// <returns></returns>
+        public int CheckNoOfFacesInImage(string appStartPath, string inputFilePath)
+        {
+            int noOfFaces = 0;
+            Bitmap bmp = (Bitmap)Image.FromFile(inputFilePath);
+            using (Image<Bgr, byte> nextFrame = new Image<Bgr, Byte>(bmp))
+            {
+                if (nextFrame != null)
+                {
+                    Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
+                    var faces =
+                            grayframe.DetectHaarCascade(
+                                    haar, 1.79, 4,
+                                    HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
+                                    new Size(nextFrame.Width / 20, nextFrame.Height / 20)
+                                    )[0];
+                    noOfFaces = faces.Count();
+                }
+            }
+            return noOfFaces;
+        }
+
         #endregion
     }
 }

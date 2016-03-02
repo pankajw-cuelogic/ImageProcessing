@@ -10,10 +10,20 @@ ffmpeg version N-78313-g6632802 Copyright (c) 2000-2016 the FFmpeg developers
   libswscale      4.  0.100 /  4.  0.100
   libswresample   2.  0.101 /  2.  0.101
   libpostproc    54.  0.100 / 54.  0.100
-Input #0, flv, from 'http://www.sample-videos.com/video/flv/360/big_buck_bunny_360p_1mb.flv':
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'D:\videos\SampleVideo_1280x720_1mb.mp4':
   Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    creation_time   : 1970-01-01 00:00:00
     encoder         : Lavf53.24.2
-  Duration: 00:00:06.89, start: 0.000000, bitrate: 1217 kb/s
-    Stream #0:0: Video: h264 (Main), yuv420p, 640x360 [SAR 1:1 DAR 16:9], 800 kb/s, 25 fps, 25 tbr, 1k tbn, 50 tbc
-    Stream #0:1: Audio: aac (LC), 48000 Hz, 5.1, fltp, 384 kb/s
+  Duration: 00:00:05.31, start: 0.000000, bitrate: 1589 kb/s
+    Stream #0:0(und): Video: h264 (Main) (avc1 / 0x31637661), yuv420p, 1280x720 [SAR 1:1 DAR 16:9], 1205 kb/s, 25 fps, 25 tbr, 12800 tbn, 50 tbc (default)
+    Metadata:
+      creation_time   : 1970-01-01 00:00:00
+      handler_name    : VideoHandler
+    Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, 5.1, fltp, 384 kb/s (default)
+    Metadata:
+      creation_time   : 1970-01-01 00:00:00
+      handler_name    : SoundHandler
 At least one output file must be specified

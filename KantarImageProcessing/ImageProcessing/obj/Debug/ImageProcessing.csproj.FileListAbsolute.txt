@@ -19,3 +19,8 @@ D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\Imag
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\Newtonsoft.Json.dll
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\ImageVideoGrabber.pdb
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\Newtonsoft.Json.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\DataLayer.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\EntityFramework.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\DataLayer.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\EntityFramework.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\EntityFramework.SqlServer.dll

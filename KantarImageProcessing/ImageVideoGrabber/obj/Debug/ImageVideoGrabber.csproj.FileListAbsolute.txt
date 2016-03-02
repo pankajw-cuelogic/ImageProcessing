@@ -9,3 +9,7 @@ D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\Ne
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\obj\Debug\ImageVideoGrabber.csprojResolveAssemblyReference.cache
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\obj\Debug\ImageVideoGrabber.dll
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\obj\Debug\ImageVideoGrabber.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\DataLayer.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\EntityFramework.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\DataLayer.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoGrabber\bin\Debug\EntityFramework.xml

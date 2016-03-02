@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ImageDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Image">
+    <Key>
+      <PropertyRef Name="ImageId" />
+    </Key>
+    <Property Name="ImageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Length" Type="int" />
+    <Property Name="Name" Type="nvarchar" MaxLength="200" />
+    <Property Name="Height" Type="int" />
+    <Property Name="Width" Type="int" />
+    <Property Name="ImagePath" Type="nvarchar" MaxLength="300" />
+    <Property Name="IsImageContainsFace" Type="bit" />
+    <Property Name="IsImageContainsText" Type="bit" />
+    <Property Name="RedPercentage" Type="int" />
+    <Property Name="GreenPercentage" Type="int" />
+    <Property Name="BluePercentage" Type="int" />
+    <Property Name="FaceCount" Type="int" />
+    <Property Name="Checksum" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDatetime" Type="datetime" />
+    <Property Name="UpdatedDatetime" Type="datetime" />
+    <Property Name="CreatedBy" Type="int" />
+    <Property Name="UpdatedBy" Type="int" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <EntityContainer Name="ImageDBModelStoreContainer">
+    <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

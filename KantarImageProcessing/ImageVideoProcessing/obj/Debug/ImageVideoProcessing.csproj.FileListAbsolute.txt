@@ -12,3 +12,8 @@ D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.csproj.ResolveComReference.cache
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.dll
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\obj\Debug\ImageVideoProcessing.csprojResolveAssemblyReference.cache
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\DataLayer.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\EntityFramework.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\DataLayer.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageVideoProcessing\bin\Debug\EntityFramework.xml

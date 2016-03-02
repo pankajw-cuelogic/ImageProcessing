@@ -44,13 +44,14 @@
             this.button1 = new System.Windows.Forms.Button();
             this.pbLoading = new System.Windows.Forms.PictureBox();
             this.pbImage = new System.Windows.Forms.PictureBox();
+            this.btnSaveMetadata = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.SuspendLayout();
             // 
             // btnProcess
             // 
-            this.btnProcess.Location = new System.Drawing.Point(465, 27);
+            this.btnProcess.Location = new System.Drawing.Point(409, 26);
             this.btnProcess.Name = "btnProcess";
             this.btnProcess.Size = new System.Drawing.Size(87, 23);
             this.btnProcess.TabIndex = 0;
@@ -64,9 +65,9 @@
             // 
             // btnUpload
             // 
-            this.btnUpload.Location = new System.Drawing.Point(379, 27);
+            this.btnUpload.Location = new System.Drawing.Point(339, 26);
             this.btnUpload.Name = "btnUpload";
-            this.btnUpload.Size = new System.Drawing.Size(75, 23);
+            this.btnUpload.Size = new System.Drawing.Size(63, 23);
             this.btnUpload.TabIndex = 1;
             this.btnUpload.Text = "Browse";
             this.btnUpload.UseVisualStyleBackColor = true;
@@ -74,7 +75,7 @@
             // 
             // txtFilePath
             // 
-            this.txtFilePath.Location = new System.Drawing.Point(145, 26);
+            this.txtFilePath.Location = new System.Drawing.Point(117, 26);
             this.txtFilePath.Name = "txtFilePath";
             this.txtFilePath.Size = new System.Drawing.Size(212, 20);
             this.txtFilePath.TabIndex = 2;
@@ -128,7 +129,7 @@
             // 
             // btnProcessVideo
             // 
-            this.btnProcessVideo.Location = new System.Drawing.Point(565, 27);
+            this.btnProcessVideo.Location = new System.Drawing.Point(504, 26);
             this.btnProcessVideo.Name = "btnProcessVideo";
             this.btnProcessVideo.Size = new System.Drawing.Size(88, 23);
             this.btnProcessVideo.TabIndex = 11;
@@ -147,7 +148,7 @@
             // lblSelectFile
             // 
             this.lblSelectFile.AutoSize = true;
-            this.lblSelectFile.Location = new System.Drawing.Point(25, 29);
+            this.lblSelectFile.Location = new System.Drawing.Point(6, 29);
             this.lblSelectFile.Name = "lblSelectFile";
             this.lblSelectFile.Size = new System.Drawing.Size(107, 13);
             this.lblSelectFile.TabIndex = 12;
@@ -155,9 +156,9 @@
             // 
             // btnFaceDetect
             // 
-            this.btnFaceDetect.Location = new System.Drawing.Point(669, 28);
+            this.btnFaceDetect.Location = new System.Drawing.Point(601, 26);
             this.btnFaceDetect.Name = "btnFaceDetect";
-            this.btnFaceDetect.Size = new System.Drawing.Size(71, 23);
+            this.btnFaceDetect.Size = new System.Drawing.Size(79, 23);
             this.btnFaceDetect.TabIndex = 13;
             this.btnFaceDetect.Text = "Detect Face";
             this.btnFaceDetect.UseVisualStyleBackColor = true;
@@ -165,11 +166,11 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(752, 28);
+            this.button1.Location = new System.Drawing.Point(689, 27);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(101, 23);
             this.button1.TabIndex = 14;
-            this.button1.Text = "Search Duplicate";
+            this.button1.Text = "Duplicate Search";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.DuplicateSearch_Click);
             // 
@@ -192,11 +193,22 @@
             this.pbImage.TabIndex = 6;
             this.pbImage.TabStop = false;
             // 
+            // btnSaveMetadata
+            // 
+            this.btnSaveMetadata.Location = new System.Drawing.Point(339, 58);
+            this.btnSaveMetadata.Name = "btnSaveMetadata";
+            this.btnSaveMetadata.Size = new System.Drawing.Size(101, 23);
+            this.btnSaveMetadata.TabIndex = 15;
+            this.btnSaveMetadata.Text = "Save Metadata";
+            this.btnSaveMetadata.UseVisualStyleBackColor = true;
+            this.btnSaveMetadata.Click += new System.EventHandler(this.btnSaveMetadata_Click);
+            // 
             // frmImageProcessing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 511);
+            this.Controls.Add(this.btnSaveMetadata);
             this.Controls.Add(this.pbLoading);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnFaceDetect);
@@ -241,6 +253,7 @@
         private System.Windows.Forms.Button btnFaceDetect;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pbLoading;
+        private System.Windows.Forms.Button btnSaveMetadata;
     }
 }
 

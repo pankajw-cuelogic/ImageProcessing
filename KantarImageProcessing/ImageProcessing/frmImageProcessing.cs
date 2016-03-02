@@ -21,6 +21,8 @@ namespace ImageProcessing
         int noOfFaces = 0;
         Bitmap newFrame = null;
         string appStartPath = Application.StartupPath;
+
+        FaceDetection faceDetectObj = null;
         #endregion
         public frmImageProcessing()
         {
@@ -182,13 +184,13 @@ namespace ImageProcessing
                 PictureBox[] pics = new PictureBox[files.Count()];
                 FlowLayoutPanel[] flws = new FlowLayoutPanel[files.Count()];
                 Label[] lbl = new Label[files.Count()];
-                
+                faceDetectObj = new FaceDetection(appStartPath);
                 int brh = 0;
                 for (int i = 0; i < files.Count(); i++)
                 {
                     noOfFaces = 0;
                     newFrame = null;
-                    new FaceDetection().DetectFace(appStartPath, files[i].FullName, ref noOfFaces, ref newFrame);
+                    faceDetectObj.DetectFace(appStartPath, files[i].FullName, ref noOfFaces, ref newFrame);
                     flws[i] = new FlowLayoutPanel();
                     flws[i].Name = "flw" + i;
                     flws[i].Location = new Point(3, brh);
@@ -249,7 +251,8 @@ namespace ImageProcessing
                 return;
             }
             ShowLoader();
-            new FaceDetection().DetectFace(appStartPath, txtFilePath.Text.ToString(), ref noOfFaces, ref newFrame);
+            FaceDetection faceDetectObj = new FaceDetection(appStartPath);
+            faceDetectObj.DetectFace(appStartPath, txtFilePath.Text.ToString(), ref noOfFaces, ref newFrame);
             HideLoader();
             pbImage.Image = newFrame;
             pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -271,8 +274,11 @@ namespace ImageProcessing
             double length = 100000;
             string targetDirPath =appStartPath+  @"\bin\img";
             List<DuplicateImageCheck> duplicateImageList = new List<DuplicateImageCheck>();
-            new DuplicateImageSearch().GetAllSimilarImages(txtFilePath.Text.ToString(), length, targetDirPath, ref duplicateImageList);
-            
+            //Comparison on pixel by pixel
+            //new DuplicateImageSearch().GetAllSimilarImages(txtFilePath.Text.ToString(), length, targetDirPath, ref duplicateImageList);
+            //compare by database
+            new DuplicateImageSearch().GetAllSimilarImages(txtFilePath.Text.ToString(), appStartPath, length, ref duplicateImageList);
+                                   
             if (duplicateImageList.Count() > 1)
             {
                 foreach (var x in duplicateImageList)
@@ -386,6 +392,11 @@ namespace ImageProcessing
             var result4 = imageGrab.GetAllSimilarImages(ImageFileDupCheck);
             var v4 = result4;   
         }
-        #endregion 
+        #endregion
+
+        private void btnSaveMetadata_Click(object sender, EventArgs e)
+        {
+            new DuplicateImageSearch().GetMetadataAllImages(@"D:\videos\bmp images", appStartPath);
+        }
     }
 }

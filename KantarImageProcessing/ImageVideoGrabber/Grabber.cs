@@ -10,7 +10,6 @@ namespace ImageVideoGrabber
         #region Global Declararion
         AudioGrabber audioGrab = new AudioGrabber();
         DuplicateImageSearch dupSearch = new DuplicateImageSearch();
-        FaceDetection faceDetect = new FaceDetection();
         VideoGrabber videoGrab = new VideoGrabber();
         ImageVideoProcessing.ImageGrabber imageGrab = new ImageVideoProcessing.ImageGrabber();
         #endregion
