@@ -13,7 +13,7 @@ namespace ImageVideoProcessing
     public class ImageGrabber
     {
         #region Global Declaration
-        int pixelIncrementVal = 1;
+        int pixelIncrementVal = 2;
 
         #endregion
 
@@ -412,7 +412,70 @@ namespace ImageVideoProcessing
                 throw;
             }
         }
+        
+        /// <summary>
+        /// To get metadata of Image
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="Height"></param>
+        /// <param name="Width"></param>
+        /// <param name="Length"></param>
+        public void GetImageMetadata(string fileName, ref int Height, ref int Width, ref long Length, ref int RedPercentage, ref int BluePercentage, ref int GreenPercentage)
+        { 
+            try
+            {   
+                Length = new FileInfo(fileName).Length;
+                GetRGBPercentage(fileName, ref RedPercentage, ref BluePercentage, ref GreenPercentage,ref Height,ref Width);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
+        public void GetRGBPercentage(string fileName,ref int RedPercentage ,ref int BluePercentage,ref int GreenPercentage , ref int Height, ref int Width)
+        {
+            try
+            {
+                Boolean val = new CommanImplementation().IsLocalPath(fileName);
+                long Red = 0, Blue = 0, Green = 0, totalPixel=0;
+
+                Bitmap bmp = null;
+                if (!val)
+                {
+                    WebClient l_WebClient = new WebClient();
+                    byte[] l_imageBytes = l_WebClient.DownloadData(fileName);
+                    MemoryStream l_stream = new MemoryStream(l_imageBytes);
+                    System.Drawing.Image.FromStream(l_stream);
+                    bmp = new Bitmap(System.Drawing.Image.FromStream(l_stream));
+                }
+                else {
+                    bmp = new Bitmap(fileName);
+                }
+
+                Height = bmp.Height;
+                Width = bmp.Width;
+
+                for (int x = 0; x < bmp.Size.Width; x += pixelIncrementVal)
+                {
+                    for (int y = 0; y < bmp.Size.Height; y += pixelIncrementVal)
+                    { 
+                        Red += bmp.GetPixel(x, y).R;
+                        Green += bmp.GetPixel(x, y).G;
+                        Blue += bmp.GetPixel(x, y).B;
+                    }
+                }
+                totalPixel = Red + Green + Blue;
+
+                RedPercentage = totalPixel != 0 ? (int)Math.Round((Convert.ToDecimal(Red) / Convert.ToDecimal(Red + Green + Blue)) * 100) : 0;
+                GreenPercentage = totalPixel != 0 ? (int)Math.Round((Convert.ToDecimal(Green) / Convert.ToDecimal(Red + Green + Blue)) * 100) : 0;
+                BluePercentage = totalPixel != 0 ? (int)Math.Round((Convert.ToDecimal(Blue) / Convert.ToDecimal(Red + Green + Blue)) * 100) : 0;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         #endregion
 
     }

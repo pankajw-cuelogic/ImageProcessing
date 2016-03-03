@@ -21,6 +21,8 @@ namespace ImageProcessing
         int noOfFaces = 0;
         Bitmap newFrame = null;
         string appStartPath = Application.StartupPath;
+
+        FaceDetection faceDetectObj = null;
         #endregion
         public frmImageProcessing()
         {
@@ -182,13 +184,16 @@ namespace ImageProcessing
                 PictureBox[] pics = new PictureBox[files.Count()];
                 FlowLayoutPanel[] flws = new FlowLayoutPanel[files.Count()];
                 Label[] lbl = new Label[files.Count()];
-                
+                faceDetectObj = new FaceDetection(appStartPath);
                 int brh = 0;
                 for (int i = 0; i < files.Count(); i++)
                 {
+                    if (!File.Exists(files[i].FullName))
+                        continue;
+
                     noOfFaces = 0;
                     newFrame = null;
-                    new FaceDetection().DetectFace(appStartPath, files[i].FullName, ref noOfFaces, ref newFrame);
+                    faceDetectObj.DetectFace(appStartPath, files[i].FullName, ref noOfFaces, ref newFrame);
                     flws[i] = new FlowLayoutPanel();
                     flws[i].Name = "flw" + i;
                     flws[i].Location = new Point(3, brh);
@@ -199,8 +204,7 @@ namespace ImageProcessing
                     lbl[i] = new Label();
                     lbl[i].Name = files[i].Name;
                     lbl[i].Size = new Size(100, 35);
-                    //lbl[i].Image = System.Drawing.Image.FromFile(files[i].FullName);
-                    lbl[i].Text = "Frame "+i +" Contains " + noOfFaces + " Face(s)";
+                    lbl[i].Text = "Frame " + i + " Contains " + noOfFaces + " Face(s)";
 
                     pics[i] = new PictureBox();
                     pics[i].Name = files[i].FullName;
@@ -249,7 +253,8 @@ namespace ImageProcessing
                 return;
             }
             ShowLoader();
-            new FaceDetection().DetectFace(appStartPath, txtFilePath.Text.ToString(), ref noOfFaces, ref newFrame);
+            FaceDetection faceDetectObj = new FaceDetection(appStartPath);
+            faceDetectObj.DetectFace(appStartPath, txtFilePath.Text.ToString(), ref noOfFaces, ref newFrame);
             HideLoader();
             pbImage.Image = newFrame;
             pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -271,8 +276,11 @@ namespace ImageProcessing
             double length = 100000;
             string targetDirPath =appStartPath+  @"\bin\img";
             List<DuplicateImageCheck> duplicateImageList = new List<DuplicateImageCheck>();
-            new DuplicateImageSearch().GetAllSimilarImages(txtFilePath.Text.ToString(), length, targetDirPath, ref duplicateImageList);
-            
+            //Comparison on pixel by pixel
+            //new DuplicateImageSearch().GetAllSimilarImages(txtFilePath.Text.ToString(), length, targetDirPath, ref duplicateImageList);
+            //compare by database
+            new DuplicateImageSearch().GetAllSimilarImages(txtFilePath.Text.ToString(), appStartPath, length, ref duplicateImageList);
+                                   
             if (duplicateImageList.Count() > 1)
             {
                 foreach (var x in duplicateImageList)
@@ -305,32 +313,41 @@ namespace ImageProcessing
                 int brh = 0;
                 for (int i = 0; i < totalFiles; i++)
                 {
-                    noOfFaces = 0;
-                    newFrame = null;
+                    try
+                    {
+                        if (!File.Exists(duplicateImageList[i].FileName))
+                            continue;
 
-                    flws[i] = new FlowLayoutPanel();
-                    flws[i].Name = "flw" + i;
-                    flws[i].Location = new Point(3, brh);
-                    flws[i].Size = new Size(217, 210);
-                    flws[i].BackColor = Color.DarkCyan;
-                    flws[i].BorderStyle = BorderStyle.Fixed3D;
+                        noOfFaces = 0;
+                        newFrame = null;
 
-                    lbl[i] = new Label();
-                    lbl[i].Name = duplicateImageList[i].Percentage;
-                    lbl[i].Size = new Size(100, 35);
-                    lbl[i].Text = "Image matching percentage is " + duplicateImageList[i].Percentage;
+                        flws[i] = new FlowLayoutPanel();
+                        flws[i].Name = "flw" + i;
+                        flws[i].Location = new Point(3, brh);
+                        flws[i].Size = new Size(217, 210);
+                        flws[i].BackColor = Color.DarkCyan;
+                        flws[i].BorderStyle = BorderStyle.Fixed3D;
 
-                    pics[i] = new PictureBox();
-                    pics[i].Name = duplicateImageList[i].FileName;
-                    pics[i].Size = new Size(217, 175);
-                    pics[i].Image = System.Drawing.Image.FromFile(duplicateImageList[i].FileName);
-                    pics[i].SizeMode = PictureBoxSizeMode.StretchImage;
+                        lbl[i] = new Label();
+                        lbl[i].Name = duplicateImageList[i].Percentage;
+                        lbl[i].Size = new Size(100, 35);
+                        lbl[i].Text = "Image matching percentage is " + duplicateImageList[i].Percentage;
 
-                    flws[i].Controls.Add(lbl[i]);
-                    flws[i].Controls.Add(pics[i]);
+                        pics[i] = new PictureBox();
+                        pics[i].Name = duplicateImageList[i].FileName;
+                        pics[i].Size = new Size(217, 175);
+                        pics[i].Image = System.Drawing.Image.FromFile(duplicateImageList[i].FileName);
+                        pics[i].SizeMode = PictureBoxSizeMode.StretchImage;
 
-                    this.Controls.Add(flws[i]);
-                    flowLayoutPanel1.Controls.Add(flws[i]);
+                        flws[i].Controls.Add(lbl[i]);
+                        flws[i].Controls.Add(pics[i]);
+
+                        this.Controls.Add(flws[i]);
+                        flowLayoutPanel1.Controls.Add(flws[i]);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
             }
             catch (Exception)
@@ -386,6 +403,11 @@ namespace ImageProcessing
             var result4 = imageGrab.GetAllSimilarImages(ImageFileDupCheck);
             var v4 = result4;   
         }
-        #endregion 
+        #endregion
+
+        private void btnSaveMetadata_Click(object sender, EventArgs e)
+        {
+            new DuplicateImageSearch().GetMetadataAllImages(@"D:\videos\bmp images", appStartPath);
+        }
     }
 }

@@ -1,0 +1,9 @@
+D:\git-code\ImageProcessing\KantarImageProcessing\DataLayer\bin\Debug\DataLayer.dll.config
+D:\git-code\ImageProcessing\KantarImageProcessing\DataLayer\bin\Debug\DataLayer.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\DataLayer\bin\Debug\DataLayer.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\DataLayer\bin\Debug\EntityFramework.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\DataLayer\bin\Debug\EntityFramework.SqlServer.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\DataLayer\bin\Debug\EntityFramework.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\DataLayer\bin\Debug\EntityFramework.SqlServer.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\DataLayer\obj\Debug\DataLayer.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\DataLayer\obj\Debug\DataLayer.pdb
