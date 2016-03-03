@@ -188,6 +188,9 @@ namespace ImageProcessing
                 int brh = 0;
                 for (int i = 0; i < files.Count(); i++)
                 {
+                    if (!File.Exists(files[i].FullName))
+                        continue;
+
                     noOfFaces = 0;
                     newFrame = null;
                     faceDetectObj.DetectFace(appStartPath, files[i].FullName, ref noOfFaces, ref newFrame);
@@ -201,8 +204,7 @@ namespace ImageProcessing
                     lbl[i] = new Label();
                     lbl[i].Name = files[i].Name;
                     lbl[i].Size = new Size(100, 35);
-                    //lbl[i].Image = System.Drawing.Image.FromFile(files[i].FullName);
-                    lbl[i].Text = "Frame "+i +" Contains " + noOfFaces + " Face(s)";
+                    lbl[i].Text = "Frame " + i + " Contains " + noOfFaces + " Face(s)";
 
                     pics[i] = new PictureBox();
                     pics[i].Name = files[i].FullName;
@@ -311,32 +313,41 @@ namespace ImageProcessing
                 int brh = 0;
                 for (int i = 0; i < totalFiles; i++)
                 {
-                    noOfFaces = 0;
-                    newFrame = null;
+                    try
+                    {
+                        if (!File.Exists(duplicateImageList[i].FileName))
+                            continue;
 
-                    flws[i] = new FlowLayoutPanel();
-                    flws[i].Name = "flw" + i;
-                    flws[i].Location = new Point(3, brh);
-                    flws[i].Size = new Size(217, 210);
-                    flws[i].BackColor = Color.DarkCyan;
-                    flws[i].BorderStyle = BorderStyle.Fixed3D;
+                        noOfFaces = 0;
+                        newFrame = null;
 
-                    lbl[i] = new Label();
-                    lbl[i].Name = duplicateImageList[i].Percentage;
-                    lbl[i].Size = new Size(100, 35);
-                    lbl[i].Text = "Image matching percentage is " + duplicateImageList[i].Percentage;
+                        flws[i] = new FlowLayoutPanel();
+                        flws[i].Name = "flw" + i;
+                        flws[i].Location = new Point(3, brh);
+                        flws[i].Size = new Size(217, 210);
+                        flws[i].BackColor = Color.DarkCyan;
+                        flws[i].BorderStyle = BorderStyle.Fixed3D;
 
-                    pics[i] = new PictureBox();
-                    pics[i].Name = duplicateImageList[i].FileName;
-                    pics[i].Size = new Size(217, 175);
-                    pics[i].Image = System.Drawing.Image.FromFile(duplicateImageList[i].FileName);
-                    pics[i].SizeMode = PictureBoxSizeMode.StretchImage;
+                        lbl[i] = new Label();
+                        lbl[i].Name = duplicateImageList[i].Percentage;
+                        lbl[i].Size = new Size(100, 35);
+                        lbl[i].Text = "Image matching percentage is " + duplicateImageList[i].Percentage;
 
-                    flws[i].Controls.Add(lbl[i]);
-                    flws[i].Controls.Add(pics[i]);
+                        pics[i] = new PictureBox();
+                        pics[i].Name = duplicateImageList[i].FileName;
+                        pics[i].Size = new Size(217, 175);
+                        pics[i].Image = System.Drawing.Image.FromFile(duplicateImageList[i].FileName);
+                        pics[i].SizeMode = PictureBoxSizeMode.StretchImage;
 
-                    this.Controls.Add(flws[i]);
-                    flowLayoutPanel1.Controls.Add(flws[i]);
+                        flws[i].Controls.Add(lbl[i]);
+                        flws[i].Controls.Add(pics[i]);
+
+                        this.Controls.Add(flws[i]);
+                        flowLayoutPanel1.Controls.Add(flws[i]);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
             }
             catch (Exception)

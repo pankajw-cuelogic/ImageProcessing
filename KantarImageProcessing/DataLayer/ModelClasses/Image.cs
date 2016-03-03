@@ -75,20 +75,21 @@ namespace DataLayer.ModelClasses
         {
             try
             {
-                var imgList = ent.Images.Where(p => p.Checksum == imgObj.Checksum).ToList();
+                var imgList = ent.Images.Where(p => p.Checksum == imgObj.Checksum && p.ImagePath != imgObj.ImagePath).ToList();
                 if (imgList.Count() != 0)
                     return imgList;
 
                 var resultedImgList = ent.Images.Where(p => p.Length >= (imgObj.Length - 5000) && p.Length <= (imgObj.Length + 5000)
-                                  && p.RedPercentage >= (imgObj.RedPercentage - 5) && p.RedPercentage <= (imgObj.RedPercentage + 5)
-                                  && p.GreenPercentage >= (imgObj.GreenPercentage - 5) && p.GreenPercentage <= (imgObj.GreenPercentage + 5)
-                                  && p.BluePercentage >= (imgObj.BluePercentage - 5) && p.BluePercentage <= (imgObj.BluePercentage + 5)
-                                  && p.BluePercentage >= (imgObj.BluePercentage - 5) && p.BluePercentage <= (imgObj.BluePercentage + 5)
+                                  && p.RedPercentage >= (imgObj.RedPercentage - 2) && p.RedPercentage <= (imgObj.RedPercentage + 2)
+                                  && p.GreenPercentage >= (imgObj.GreenPercentage - 2) && p.GreenPercentage <= (imgObj.GreenPercentage + 2)
+                                  && p.BluePercentage >= (imgObj.BluePercentage - 2) && p.BluePercentage <= (imgObj.BluePercentage + 2)
                                   && p.Width >= (imgObj.Width - 50) && p.Width <= (imgObj.Width + 50)
                                   && p.Height >= (imgObj.Height - 50) && p.Height <= (imgObj.Height + 50)
+                                  && p.IsImageContainsFace == imgObj.IsImageContainsFace
+                                  && p.IsImageContainsText == imgObj.IsImageContainsText
                                  ).ToList();
 
-                return  resultedImgList;
+                return resultedImgList;
             }
             catch (Exception)
             {

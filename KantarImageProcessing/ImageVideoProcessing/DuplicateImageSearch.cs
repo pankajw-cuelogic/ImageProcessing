@@ -191,7 +191,8 @@ namespace ImageVideoProcessing
             imageObj.ImagePath = imagePath;
             imageObj.IsImageContainsFace = noOfFaces > 0 ? true : false;
             imageObj.IsImageContainsText = imageContent.Length > 0 ? true : false;
-            imageObj.Name = imagePath.Split('/')[imagePath.Split('/').Count()-1];
+            imageObj.Length = length;
+            imageObj.Name = imagePath.Split('\\')[imagePath.Split('\\').Count()-1];
             imageObj.FaceCount = noOfFaces;
             imageObj.CreatedDatetime = DateTime.Now;
             imageObj.IsDeleted = false;

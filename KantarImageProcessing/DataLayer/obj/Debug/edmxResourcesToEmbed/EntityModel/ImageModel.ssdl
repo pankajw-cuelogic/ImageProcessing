@@ -5,7 +5,7 @@
       <PropertyRef Name="ImageId" />
     </Key>
     <Property Name="ImageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Length" Type="int" />
+    <Property Name="Length" Type="bigint" />
     <Property Name="Name" Type="nvarchar" MaxLength="200" />
     <Property Name="Height" Type="int" />
     <Property Name="Width" Type="int" />

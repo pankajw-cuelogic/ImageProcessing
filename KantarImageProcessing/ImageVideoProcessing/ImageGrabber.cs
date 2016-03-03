@@ -421,13 +421,10 @@ namespace ImageVideoProcessing
         /// <param name="Width"></param>
         /// <param name="Length"></param>
         public void GetImageMetadata(string fileName, ref int Height, ref int Width, ref long Length, ref int RedPercentage, ref int BluePercentage, ref int GreenPercentage)
-        {
-            Bitmap bmp = null;
+        { 
             try
-            {  
-                FileInfo fileInfo = new FileInfo(fileName);
-                Length = fileInfo.Length;
-
+            {   
+                Length = new FileInfo(fileName).Length;
                 GetRGBPercentage(fileName, ref RedPercentage, ref BluePercentage, ref GreenPercentage,ref Height,ref Width);
             }
             catch (Exception)
@@ -441,7 +438,7 @@ namespace ImageVideoProcessing
             try
             {
                 Boolean val = new CommanImplementation().IsLocalPath(fileName);
-                long Red = 0, Blue = 0, Green = 0;
+                long Red = 0, Blue = 0, Green = 0, totalPixel=0;
 
                 Bitmap bmp = null;
                 if (!val)
@@ -468,10 +465,11 @@ namespace ImageVideoProcessing
                         Blue += bmp.GetPixel(x, y).B;
                     }
                 }
-               
-                RedPercentage = (int)Math.Round((Convert.ToDecimal(Red) / Convert.ToDecimal(Red + Green + Blue)) * 100);
-                GreenPercentage = (int)Math.Round((Convert.ToDecimal(Green) / Convert.ToDecimal(Red + Green + Blue)) * 100);
-                BluePercentage = (int)Math.Round((Convert.ToDecimal(Blue) / Convert.ToDecimal(Red + Green + Blue))*100);
+                totalPixel = Red + Green + Blue;
+
+                RedPercentage = totalPixel != 0 ? (int)Math.Round((Convert.ToDecimal(Red) / Convert.ToDecimal(Red + Green + Blue)) * 100) : 0;
+                GreenPercentage = totalPixel != 0 ? (int)Math.Round((Convert.ToDecimal(Green) / Convert.ToDecimal(Red + Green + Blue)) * 100) : 0;
+                BluePercentage = totalPixel != 0 ? (int)Math.Round((Convert.ToDecimal(Blue) / Convert.ToDecimal(Red + Green + Blue)) * 100) : 0;
             }
             catch (Exception)
             {

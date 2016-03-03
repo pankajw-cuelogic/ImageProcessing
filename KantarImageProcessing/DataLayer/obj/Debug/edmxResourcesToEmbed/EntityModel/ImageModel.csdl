@@ -38,7 +38,7 @@
       <PropertyRef Name="ImageId" />
     </Key>
     <Property Name="ImageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Length" Type="Int32" />
+    <Property Name="Length" Type="Int64" />
     <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <Property Name="Height" Type="Int32" />
     <Property Name="Width" Type="Int32" />

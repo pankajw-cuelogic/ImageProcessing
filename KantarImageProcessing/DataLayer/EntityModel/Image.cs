@@ -15,7 +15,7 @@ namespace DataLayer.EntityModel
     public partial class Image
     {
         public int ImageId { get; set; }
-        public Nullable<int> Length { get; set; }
+        public Nullable<long> Length { get; set; }
         public string Name { get; set; }
         public Nullable<int> Height { get; set; }
         public Nullable<int> Width { get; set; }

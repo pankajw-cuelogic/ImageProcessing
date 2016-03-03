@@ -10,7 +10,7 @@
             <PropertyRef Name="ImageId" />
           </Key>
           <Property Name="ImageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Length" Type="int" />
+          <Property Name="Length" Type="bigint" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="Height" Type="int" />
           <Property Name="Width" Type="int" />
@@ -73,7 +73,7 @@
             <PropertyRef Name="ImageId" />
           </Key>
           <Property Name="ImageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Length" Type="Int32" />
+          <Property Name="Length" Type="Int64" />
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Height" Type="Int32" />
           <Property Name="Width" Type="Int32" />
