@@ -73,3 +73,5 @@ D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\ko\S
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\ru\System.Spatial.resources.dll
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\zh-Hans\System.Spatial.resources.dll
 D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\zh-Hant\System.Spatial.resources.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\CommanImplementation.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\CommanImplementation.pdb

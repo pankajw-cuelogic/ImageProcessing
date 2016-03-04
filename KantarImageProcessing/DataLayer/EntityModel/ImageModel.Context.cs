@@ -28,6 +28,7 @@ namespace DataLayer.EntityModel
         }
     
         public virtual DbSet<Image> Images { get; set; }
+        public virtual DbSet<ImageContent> ImageContents { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

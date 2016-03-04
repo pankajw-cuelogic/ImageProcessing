@@ -44,18 +44,19 @@ namespace ImageVideoGrabber
     /// <summary>
     /// DuplicateSearchImagePath : Model to take Image path to search duplicate images in specified folder
     /// </summary>
-    public class DuplicateImagePath
+    public class ImageFileDuplicateCheck
     {
         public string FilePath { get; set; }
         public double FileLength { get; set; }
         public string FolderPath { get; set; }
         public string Message { get; set; }
+        public string ApplicationStartupPath { get; set; }
     }
      
     /// <summary>
     /// AudioInput : Model to take details of Audio input file
     /// </summary>
-    public class AudioInput
+    public class AudioFileInput
     {
         public string ApplicationStartupPath { get; set; }
         public string AudioFolderPath { get; set; }

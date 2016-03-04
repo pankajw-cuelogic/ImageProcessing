@@ -22,8 +22,37 @@
     <Property Name="CreatedBy" Type="int" />
     <Property Name="UpdatedBy" Type="int" />
     <Property Name="IsDeleted" Type="bit" />
+    <Property Name="Description" Type="nvarchar(max)" />
   </EntityType>
+  <EntityType Name="ImageContent">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Fk_ImageId" Type="int" />
+    <Property Name="DiscountText" Type="nvarchar(max)" />
+    <Property Name="OfferText" Type="nvarchar(max)" />
+    <Property Name="ImageContent" Type="nvarchar(max)" />
+    <Property Name="IsDeleted" Type="bit" />
+  </EntityType>
+  <Association Name="FK_ImageContent_Image">
+    <End Role="Image" Type="Self.Image" Multiplicity="0..1" />
+    <End Role="ImageContent" Type="Self.ImageContent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Image">
+        <PropertyRef Name="ImageId" />
+      </Principal>
+      <Dependent Role="ImageContent">
+        <PropertyRef Name="Fk_ImageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="ImageDBModelStoreContainer">
     <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ImageContent" EntityType="Self.ImageContent" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ImageContent_Image" Association="Self.FK_ImageContent_Image">
+      <End Role="Image" EntitySet="Image" />
+      <End Role="ImageContent" EntitySet="ImageContent" />
+    </AssociationSet>
   </EntityContainer>
 </Schema>

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageVideoProcessing
 {
@@ -19,8 +15,9 @@ namespace ImageVideoProcessing
     /// <summary>
     /// DuplicateImageCheck : Model to take input image details to check duplicate search in specific folder
     /// </summary>
-    public class DuplicateImageCheck
+    public class DuplicateImageDetails
     {
+        public string FilePath { get; set; }
         public string FileName { get; set; }
         public string Percentage { get; set; }
     }

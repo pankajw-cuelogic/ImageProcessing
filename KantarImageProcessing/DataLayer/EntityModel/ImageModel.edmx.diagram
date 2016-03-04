@@ -6,6 +6,8 @@
     <edmx:Diagrams>
       <Diagram DiagramId="e8d1442635964f41bbe244dde3493798" Name="Diagram1" ZoomLevel="87">
         <EntityTypeShape EntityType="ImageDBModel.Image" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ImageDBModel.ImageContent" Width="1.5" PointX="3" PointY="1.875" />
+        <AssociationConnector Association="ImageDBModel.FK_ImageContent_Image" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

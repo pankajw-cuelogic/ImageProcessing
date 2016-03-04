@@ -4,6 +4,7 @@
     <EntitySetMapping Name="Images">
       <EntityTypeMapping TypeName="ImageDBModel.Image">
         <MappingFragment StoreEntitySet="Image">
+          <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
           <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
           <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -22,6 +23,18 @@
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Length" ColumnName="Length" />
           <ScalarProperty Name="ImageId" ColumnName="ImageId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ImageContents">
+      <EntityTypeMapping TypeName="ImageDBModel.ImageContent">
+        <MappingFragment StoreEntitySet="ImageContent">
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="ImageContent1" ColumnName="ImageContent" />
+          <ScalarProperty Name="OfferText" ColumnName="OfferText" />
+          <ScalarProperty Name="DiscountText" ColumnName="DiscountText" />
+          <ScalarProperty Name="Fk_ImageId" ColumnName="Fk_ImageId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommanImplementation;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -12,8 +13,9 @@ namespace ImageVideoProcessing
     {
         #region Global Declaration
         string[] imageFilters = new String[] { "jpg", "jpeg", "png", "gif", "tiff", "bmp" };
-        FaceDetection faceDetectObj =null;
-        ImageGrabber imgGrabberObj = null;
+        FaceDetection _faceDetection =null;
+        ImageGrabber _imgGrabber = null;
+        DataUpload _blobWrapper = null;
         #endregion
 
         /// <summary>
@@ -24,12 +26,12 @@ namespace ImageVideoProcessing
         /// <param name="length">Length of image file that varies to compare with another file</param>
         /// <param name="folderPath">Folder location where to search duplocate files</param>
         /// <param name="percentageString"> returns percentage of similarities of matched images in string seperated by comma(,)</param>
-        public void GetAllSimilarImages(string inputFilePath,double length, string folderPath, ref List<DuplicateImageCheck> duplicateImageList)
+        public void GetAllSimilarImages(string inputFilePath,double length, string folderPath, ref List<DuplicateImageDetails> duplicateImageList)
         {
             {
                 try
                 {
-                    DuplicateImageCheck imgOriginalFile = new DuplicateImageCheck();
+                    DuplicateImageDetails imgOriginalFile = new DuplicateImageDetails();
                     imgOriginalFile.FileName = inputFilePath;
                     imgOriginalFile.Percentage = "Original Selected File";
                     duplicateImageList.Add(imgOriginalFile);
@@ -51,8 +53,9 @@ namespace ImageVideoProcessing
                         CompareImages(inputFilePath, imgName, ref flag, ref percentage);
                         if (flag)
                         {
-                            DuplicateImageCheck imgDupCheck = new DuplicateImageCheck();                           
-                            imgDupCheck.FileName = imgName;
+                            DuplicateImageDetails imgDupCheck = new DuplicateImageDetails();                           
+                            imgDupCheck.FilePath = imgName;
+                            imgDupCheck.FilePath = imgName.Contains("\\") ? imgName.Split('\\')[imgName.Split('\\').Count() - 1] : imgName;
                             imgDupCheck.Percentage = percentage + "%";
                             duplicateImageList.Add(imgDupCheck);
                             count++;
@@ -137,12 +140,18 @@ namespace ImageVideoProcessing
 
         #region GetMetadata
 
-        public void GetMetadataAllImages(string folderPath, string appStartPath)
+        /// <summary>
+        /// Get and save metadata of all files from input folder
+        /// </summary>
+        /// <param name="folderPath"></param>
+        /// <param name="appStartPath"></param>
+        public void SaveMetadataOfAllImages(string folderPath, string appStartPath)
         {
             try
             {
-                faceDetectObj = new FaceDetection(appStartPath);
-                imgGrabberObj = new ImageGrabber();
+                _blobWrapper = new DataUpload();
+                _faceDetection = new FaceDetection(appStartPath);
+                _imgGrabber = new ImageGrabber();
                 DirectoryInfo directory = new DirectoryInfo(folderPath);
                 List<DataLayer.EntityModel.Image> imageList = new List<DataLayer.EntityModel.Image>();
                 String[] files =  GetFilesFrom(folderPath, imageFilters,true);
@@ -151,7 +160,10 @@ namespace ImageVideoProcessing
 
                 foreach (var fileObj in fileNameList)
                 {
+                    //Get metadata of file and save it
                     imageList.Add(GetImageMetadata(fileObj, appStartPath));
+                    //Upload file to file to azure blob
+                    _blobWrapper.UploadFile(fileObj);
                 }
 
                 new DataLayer.ModelClasses.Image().SaveUpdateMetadata(imageList);
@@ -162,6 +174,39 @@ namespace ImageVideoProcessing
             }
         }
 
+        /// <summary>
+        /// Get and save metadata of file
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="appStartPath"></param>
+        public void SaveMetadataOfImage(string filePath, string appStartPath)
+        {
+            try
+            {
+                _blobWrapper = new DataUpload();
+                _faceDetection = new FaceDetection(appStartPath);
+                _imgGrabber = new ImageGrabber(); 
+                List<DataLayer.EntityModel.Image> imageList = new List<DataLayer.EntityModel.Image>();
+                String[] files = new string[1];
+                files[0] = filePath;
+                List<string> fileNameList = new List<string>();
+                fileNameList = GetUniqueImages(files.ToList());
+
+                foreach (var fileObj in fileNameList)
+                {
+                    //Get metadata of file and save it
+                    imageList.Add(GetImageMetadata(fileObj, appStartPath));
+                    //Upload file to file to azure blob
+                    _blobWrapper.UploadFile(fileObj);
+                }
+
+                new DataLayer.ModelClasses.Image().SaveUpdateMetadata(imageList);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         /// <summary>
         /// To get metadata of image
         /// </summary>
@@ -174,14 +219,14 @@ namespace ImageVideoProcessing
             long length = 0;
             DataLayer.EntityModel.Image imageObj = new DataLayer.EntityModel.Image();
             //to get checksum
-            string checksume = checkMD5(imagePath);
+            string checksume = GetchecksumeMD5(imagePath);
             //to get no of faces from image
-            int noOfFaces = faceDetectObj.CheckNoOfFacesInImage(appStartPath, imagePath);
+            int noOfFaces = _faceDetection.CheckNoOfFacesInImage(appStartPath, imagePath);
             //to get metadata
-            imgGrabberObj.GetImageMetadata(imagePath, ref height, ref width, ref length, ref RedPercentage, ref BluePercentage, ref GreenPercentage);
+            _imgGrabber.GetImageMetadata(imagePath, ref height, ref width, ref length, ref RedPercentage, ref BluePercentage, ref GreenPercentage);
             //to check image contains text or not
-            string imageContent = imgGrabberObj.ExtractTextFromImage(imagePath);
-
+            string imageContent = _imgGrabber.ExtractTextFromImage(imagePath);
+            imageContent = string.IsNullOrEmpty(imageContent) ? imageContent : imageContent.Replace("\r\n", "");
             imageObj.RedPercentage = RedPercentage;
             imageObj.GreenPercentage = GreenPercentage;
             imageObj.BluePercentage = BluePercentage;
@@ -192,11 +237,11 @@ namespace ImageVideoProcessing
             imageObj.IsImageContainsFace = noOfFaces > 0 ? true : false;
             imageObj.IsImageContainsText = imageContent.Length > 0 ? true : false;
             imageObj.Length = length;
-            imageObj.Name = imagePath.Split('\\')[imagePath.Split('\\').Count()-1];
+            imageObj.Name = imagePath.Contains("\\") ? imagePath.Split('\\')[imagePath.Split('\\').Count() - 1] : imagePath;
             imageObj.FaceCount = noOfFaces;
             imageObj.CreatedDatetime = DateTime.Now;
             imageObj.IsDeleted = false;
-
+            imageObj.Description = imageContent;
             return imageObj;
         }
 
@@ -205,7 +250,7 @@ namespace ImageVideoProcessing
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public string checkMD5(string filename)
+        public string GetchecksumeMD5(string filename)
         {
             using (var md5 = MD5.Create())
             {
@@ -239,13 +284,14 @@ namespace ImageVideoProcessing
         /// <param name="inputFilePath">Input file path of image</param>
         /// <param name="length">Length of image file that varies to compare with another file</param>
         /// <param name="percentageString"> returns percentage of similarities of matched images in string seperated by comma(,)</param>
-        public void GetAllSimilarImages(string inputFilePath,string appStartPath, double length, ref List<DuplicateImageCheck> duplicateImageList)
+        public void GetAllSimilarImages(string inputFilePath,string appStartPath, double length, ref List<DuplicateImageDetails> duplicateImageList)
         {
             {
                 try
                 {
-                    DuplicateImageCheck imgOriginalFile = new DuplicateImageCheck();
-                    imgOriginalFile.FileName = inputFilePath;
+                    DuplicateImageDetails imgOriginalFile = new DuplicateImageDetails();
+                    imgOriginalFile.FilePath = inputFilePath;
+                    imgOriginalFile.FileName = inputFilePath.Contains("\\") ? inputFilePath.Split('\\')[inputFilePath.Split('\\').Count() - 1] : inputFilePath;
                     imgOriginalFile.Percentage = "Original Selected File";
                     duplicateImageList.Add(imgOriginalFile);
 
@@ -253,18 +299,19 @@ namespace ImageVideoProcessing
                     FileInfo fileInfo = new FileInfo(inputFilePath);
                     DataLayer.EntityModel.Image metadataInputImgObj = new DataLayer.EntityModel.Image();
                     //Get metadata of input file
-                    faceDetectObj = new FaceDetection(appStartPath);
-                    imgGrabberObj = new ImageGrabber();
+                    _faceDetection = new FaceDetection(appStartPath);
+                    _imgGrabber = new ImageGrabber();
                     metadataInputImgObj = GetImageMetadata(inputFilePath, appStartPath);
 
                     var bestMatchImageList = new DataLayer.ModelClasses.Image().GetImagesByBestMatch(metadataInputImgObj);
                     // for Image similarity percentage need to compare both images
                     foreach (var infoObj in bestMatchImageList)
                     {
-                        DuplicateImageCheck imgDupCheck = new DuplicateImageCheck();
-                        imgDupCheck.FileName = infoObj.ImagePath;
-                        imgDupCheck.Percentage = "";//percentage + "%";
-                        duplicateImageList.Add(imgDupCheck);
+                        DuplicateImageDetails duplicateImageCheck = new DuplicateImageDetails();
+                        duplicateImageCheck.FilePath = infoObj.ImagePath;
+                        duplicateImageCheck.FileName = infoObj.ImagePath.Contains("\\") ? infoObj.ImagePath.Split('\\')[infoObj.ImagePath.Split('\\').Count() - 1] : infoObj.ImagePath;
+                        duplicateImageCheck.Percentage = "";
+                        duplicateImageList.Add(duplicateImageCheck);
                         count++;
                     }
                 }

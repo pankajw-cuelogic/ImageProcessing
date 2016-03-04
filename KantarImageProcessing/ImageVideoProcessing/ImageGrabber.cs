@@ -33,7 +33,6 @@ namespace ImageVideoProcessing
 
                 string ExtractedTest = "";
                 Document doc = new Document();
-
                 GC.WaitForPendingFinalizers();
                 doc.Create(fileName);
                 Thread.Sleep(500);
@@ -69,7 +68,7 @@ namespace ImageVideoProcessing
         /// <returns>returns color model</returns>
         public List<ColorModel> GetImageColors(string fileName)
         {
-            Boolean val = new CommanImplementation(). IsLocalPath(fileName);
+            Boolean val = new CommanImplementation().IsLocalPath(fileName);
             Bitmap bmp = null;
             if (!val)
             {
@@ -159,21 +158,17 @@ namespace ImageVideoProcessing
         /// <param name="fileName"></param>
         private static void DownloadRemoteImageFile(string uri, string fileName)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebRequest _request = (HttpWebRequest)WebRequest.Create(uri);
+            HttpWebResponse _response = (HttpWebResponse)_request.GetResponse();
 
-            // Check that the remote file was found. The ContentType
-            // check is performed since a request for a non-existent
-            // image file might be redirected to a 404-page, which would
-            // yield the StatusCode "OK", even though the image was not
-            // found.
-            if ((response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Moved ||
-                response.StatusCode == HttpStatusCode.Redirect) &&
-                response.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase))
+            // Check that the remote file was found.
+            if ((_response.StatusCode == HttpStatusCode.OK || _response.StatusCode == HttpStatusCode.Moved ||
+                _response.StatusCode == HttpStatusCode.Redirect) &&
+                _response.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase))
             {
 
-                // if the remote file was found, download oit
-                using (Stream inputStream = response.GetResponseStream())
+                // if the remote file was found, download it
+                using (Stream inputStream = _response.GetResponseStream())
                 using (Stream outputStream = File.OpenWrite(fileName))
                 {
                     byte[] buffer = new byte[4096];
@@ -433,6 +428,15 @@ namespace ImageVideoProcessing
             }
         }
 
+        /// <summary>
+        /// To get R, G and B percentage
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="RedPercentage"></param>
+        /// <param name="BluePercentage"></param>
+        /// <param name="GreenPercentage"></param>
+        /// <param name="Height"></param>
+        /// <param name="Width"></param>
         public void GetRGBPercentage(string fileName,ref int RedPercentage ,ref int BluePercentage,ref int GreenPercentage , ref int Height, ref int Width)
         {
             try

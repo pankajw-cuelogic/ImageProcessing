@@ -1,13 +1,12 @@
-﻿using ImageVideoGrabber;
-//using Emgu.CV;
-//using Emgu.CV.Structure;
-//using Emgu.CV.CvEnum;
+﻿using CommanImplementation;
+using ImageVideoGrabber;
 using ImageVideoProcessing;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ImageProcessing
@@ -22,7 +21,7 @@ namespace ImageProcessing
         Bitmap newFrame = null;
         string appStartPath = Application.StartupPath;
 
-        FaceDetection faceDetectObj = null;
+        FaceDetection _faceDetection = null;
         #endregion
         public frmImageProcessing()
         {
@@ -44,10 +43,11 @@ namespace ImageProcessing
 
             DisposeControls();
             ShowLoader();
+            pbImage.BringToFront();
             string imagePath = txtFilePath.Text.ToString();
             string imageContent = new ImageVideoProcessing.ImageGrabber().ExtractTextFromImage(imagePath);
             txtResult.Text = string.IsNullOrEmpty(imageContent) ? "There is no text found in Image" : imageContent;
-            txtColors.Text = "\tImage contains following major colors:" + ParseColorList(new ImageVideoProcessing.ImageGrabber().GetImageColors(imagePath));
+            txtColors.Text = "\tImage contains following major colors: " + ParseColorList(new ImageVideoProcessing.ImageGrabber().GetImageColors(imagePath));
 
             Cursor.Current = Cursors.AppStarting;
             HideLoader();
@@ -184,7 +184,7 @@ namespace ImageProcessing
                 PictureBox[] pics = new PictureBox[files.Count()];
                 FlowLayoutPanel[] flws = new FlowLayoutPanel[files.Count()];
                 Label[] lbl = new Label[files.Count()];
-                faceDetectObj = new FaceDetection(appStartPath);
+                _faceDetection = new FaceDetection(appStartPath);
                 int brh = 0;
                 for (int i = 0; i < files.Count(); i++)
                 {
@@ -193,7 +193,7 @@ namespace ImageProcessing
 
                     noOfFaces = 0;
                     newFrame = null;
-                    faceDetectObj.DetectFace(appStartPath, files[i].FullName, ref noOfFaces, ref newFrame);
+                    _faceDetection.DetectFace(appStartPath, files[i].FullName, ref noOfFaces, ref newFrame);
                     flws[i] = new FlowLayoutPanel();
                     flws[i].Name = "flw" + i;
                     flws[i].Location = new Point(3, brh);
@@ -253,8 +253,8 @@ namespace ImageProcessing
                 return;
             }
             ShowLoader();
-            FaceDetection faceDetectObj = new FaceDetection(appStartPath);
-            faceDetectObj.DetectFace(appStartPath, txtFilePath.Text.ToString(), ref noOfFaces, ref newFrame);
+            _faceDetection = new FaceDetection(appStartPath);
+            _faceDetection.DetectFace(appStartPath, txtFilePath.Text.ToString(), ref noOfFaces, ref newFrame);
             HideLoader();
             pbImage.Image = newFrame;
             pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -275,7 +275,7 @@ namespace ImageProcessing
             string message = "Following files are matches with selected image,\r\n";
             double length = 100000;
             string targetDirPath =appStartPath+  @"\bin\img";
-            List<DuplicateImageCheck> duplicateImageList = new List<DuplicateImageCheck>();
+            List<DuplicateImageDetails> duplicateImageList = new List<DuplicateImageDetails>();
             //Comparison on pixel by pixel
             //new DuplicateImageSearch().GetAllSimilarImages(txtFilePath.Text.ToString(), length, targetDirPath, ref duplicateImageList);
             //compare by database
@@ -288,7 +288,7 @@ namespace ImageProcessing
                     message += "File Name : " + x.FileName +", Percentage : "+ x.Percentage +"\r\n\r\n";
                 }
 
-                ShowAllFramesOnPanel(duplicateImageList);
+                ShowAllFramesOnPanel(duplicateImageList, true);
             }
 
             txtResult.Text = message.Trim() != "Following files are matches with selected image," ? message : "Selected Image not matched with any existing images";
@@ -300,7 +300,7 @@ namespace ImageProcessing
         /// </summary>
         /// <param name="imageName"></param>
         /// <param name="percentage"></param>
-        private void ShowAllFramesOnPanel(List<DuplicateImageCheck> duplicateImageList)
+        private void ShowAllFramesOnPanel(List<DuplicateImageDetails> duplicateImageList, Boolean isRemoteImage)
         {
             flowLayoutPanel1.BringToFront();
             try
@@ -315,12 +315,14 @@ namespace ImageProcessing
                 {
                     try
                     {
-                        if (!File.Exists(duplicateImageList[i].FileName))
-                            continue;
+                        if (!isRemoteImage)
+                        {
+                            if (!File.Exists(duplicateImageList[i].FileName))
+                                continue;
+                        }
 
                         noOfFaces = 0;
                         newFrame = null;
-
                         flws[i] = new FlowLayoutPanel();
                         flws[i].Name = "flw" + i;
                         flws[i].Location = new Point(3, brh);
@@ -331,12 +333,17 @@ namespace ImageProcessing
                         lbl[i] = new Label();
                         lbl[i].Name = duplicateImageList[i].Percentage;
                         lbl[i].Size = new Size(100, 35);
-                        lbl[i].Text = "Image matching percentage is " + duplicateImageList[i].Percentage;
+                        lbl[i].Text = isRemoteImage == true
+                            ? "Match File name : " + duplicateImageList[i].FileName
+                            : "Image matching percentage is " + duplicateImageList[i].Percentage;
 
                         pics[i] = new PictureBox();
-                        pics[i].Name = duplicateImageList[i].FileName;
+                        pics[i].Name = duplicateImageList[i].FilePath;
                         pics[i].Size = new Size(217, 175);
-                        pics[i].Image = System.Drawing.Image.FromFile(duplicateImageList[i].FileName);
+                        //pics[i].Image = System.Drawing.Image.FromFile(duplicateImageList[i].FileName);
+                        pics[i].Image = isRemoteImage == true
+                            ? System.Drawing.Image.FromStream(new MemoryStream(DownloadFile(duplicateImageList[i].FileName)))
+                            : System.Drawing.Image.FromFile(duplicateImageList[i].FilePath);
                         pics[i].SizeMode = PictureBoxSizeMode.StretchImage;
 
                         flws[i].Controls.Add(lbl[i]);
@@ -394,20 +401,76 @@ namespace ImageProcessing
             var v3 = result3;
 
             //test4
-            DuplicateImagePath ImageFileDupCheck = new DuplicateImagePath();
+            ImageFileDuplicateCheck imageFileDupCheck = new ImageFileDuplicateCheck();
             string targetDirPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\bin\img";
-            ImageFileDupCheck.FilePath = txtFilePath.Text.ToString();
-            ImageFileDupCheck.FileLength = 100000;
-            ImageFileDupCheck.FolderPath = targetDirPath;
-            
-            var result4 = imageGrab.GetAllSimilarImages(ImageFileDupCheck);
-            var v4 = result4;   
+            imageFileDupCheck.FilePath = txtFilePath.Text.ToString();
+            imageFileDupCheck.FileLength = 100000;
+            imageFileDupCheck.FolderPath = targetDirPath;
+            imageFileDupCheck.ApplicationStartupPath = appStartPath;
+            var result4 = imageGrab.GetAllSimilarImages(imageFileDupCheck);
+            var v4 = result4;
+
+            //upload image
+            imageGrab.UploadImageFile(txtFilePath.Text.ToString(),appStartPath);
+
+            //download file
+            string imagePath = txtFilePath.Text.ToString();
+            imageGrab.DownloadFile(imagePath.Contains("\\") ? imagePath.Split('\\')[imagePath.Split('\\').Count() - 1] : imagePath);
+
         }
         #endregion
 
+        /// <summary>
+        /// Get and upload metad data of images/image
+        /// user can input file or folder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSaveMetadata_Click(object sender, EventArgs e)
         {
-            new DuplicateImageSearch().GetMetadataAllImages(@"D:\videos\bmp images", appStartPath);
+            try
+            {
+                ShowLoader();
+                string filePath = txtFilePath.Text;
+                if (!IsMediaFile(filePath, imageExtensions))
+                {
+                    new DuplicateImageSearch().SaveMetadataOfAllImages(filePath, appStartPath);
+                }
+                else {
+                    new DuplicateImageSearch().SaveMetadataOfImage(filePath, appStartPath);
+                }
+                HideLoader();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private void btnUploadImage_Click(object sender, EventArgs e)
+        {
+            ShowLoader();
+            UploadFile(txtFilePath.Text);
+            HideLoader();
+        }
+
+        private void btnDownloadImage_Click(object sender, EventArgs e)
+        {
+            ShowLoader();
+            //DownloadFile(txtFilePath.Text);
+            HideLoader();
+        }
+        private async void UploadFile(string filePath)
+        {
+            DataUpload _blobWrapper = new DataUpload();
+            _blobWrapper.UploadFile(filePath);
+        }
+
+        public byte[] DownloadFile(string downloadFileName)
+        {
+            DataUpload _blobWrapper = new DataUpload();
+            byte[] data = _blobWrapper.DownloadFileFromBlob(downloadFileName);
+            return data;
         }
     }
 }
