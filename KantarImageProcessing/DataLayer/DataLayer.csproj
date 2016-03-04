@@ -54,6 +54,9 @@
     <Compile Include="EntityModel\Image.cs">
       <DependentUpon>ImageModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityModel\ImageContent.cs">
+      <DependentUpon>ImageModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityModel\ImageModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

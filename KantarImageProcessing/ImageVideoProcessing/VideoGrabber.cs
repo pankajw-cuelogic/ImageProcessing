@@ -101,7 +101,7 @@ namespace ImageVideoProcessing
                 List<ColorModel> avgVideoColorList = new List<ColorModel>();
 
                 int i = 1;
-                string blankFrames = "";
+                string blankFrame = "";
                 string colorNames = "";
                 
                 var fileEntries = GetFilesFrom(extractedImageFolderPath, imageFilters, false, frameName);
@@ -110,19 +110,19 @@ namespace ImageVideoProcessing
                     VideoDetails videoDetailsObj = new VideoDetails();
                     videoDetailsObj.FileName = fileName;
                     videoDetailsObj.Content = new ImageVideoProcessing.ImageGrabber().ExtractTextFromImage(fileName);
+                    videoDetailsObj.ColorDetails = colorNames;
                     colorList.AddRange(new ImageVideoProcessing.ImageGrabber().GetImageColors(fileName));
 
-                    videoDetailsObj.ColorDetails = colorNames;
                     if (videoDetailsObj.Content.Trim() != "")
                         contentMessage += "Frame " + i + ": \r\n" + videoDetailsObj.Content + "\r\n";
                     else
-                        blankFrames += "\r\n Frame " + i;
+                        blankFrame += "\r\n Frame " + i;
 
                     i += 1;
                 }
 
-                contentMessage += !string.IsNullOrEmpty(blankFrames) ?
-                    "\r\n\r\nFollowing frames are not having any content:" + blankFrames : "";
+                contentMessage += !string.IsNullOrEmpty(blankFrame) ?
+                    "\r\n\r\nFollowing frames are not having any content:" + blankFrame : "";
                 var avgColorList = colorList.GroupBy(g => g.color, r => r.pecentage).Select(g => new
                 {
                     color = g.Key,
@@ -153,9 +153,9 @@ namespace ImageVideoProcessing
         /// Reason : To get metata data of video file.
         /// </summary>
         /// <param name="infoFileName"></param>
-        /// <param name="VideoInfo"></param>
+        /// <param name="videoInfo"></param>
         /// <returns></returns>
-        private string GetVideoPropertyInfo(string applicationStartupPath, string infoFileName, ref string VideoInfo, ref string Duration)
+        private string GetVideoPropertyInfo(string applicationStartupPath, string infoFileName, ref string videoInfo, ref string duration)
         {
             try
             {
@@ -171,61 +171,61 @@ namespace ImageVideoProcessing
                     {
                         if (line.Contains("major_brand"))
                         {
-                            VideoInfo += "\r\n Major Brand\t" + line.Replace("major_brand", "").Replace(" ", "").Replace(":",":  ");
+                            videoInfo += "\r\n Major Brand\t" + line.Replace("major_brand", "").Replace(" ", "").Replace(":",":  ");
                             continue;
                         }
                         if (line.Contains("minor_version"))
                         {
-                            VideoInfo += !VideoInfo.Contains("Minor Version") ? "\r\n Minor Version\t" + line.Replace("minor_version", "").Replace(" ", "").Replace(":", ":  ") : "";
+                            videoInfo += !videoInfo.Contains("Minor Version") ? "\r\n Minor Version\t" + line.Replace("minor_version", "").Replace(" ", "").Replace(":", ":  ") : "";
                             continue;
                         }
                         if (line.Contains("compatible_brands"))
                         {
-                            VideoInfo += "\r\n Compatible Brands\t" + line.Replace("compatible_brands", "").Replace(" ", "").Replace(":", ":  ");
+                            videoInfo += "\r\n Compatible Brands\t" + line.Replace("compatible_brands", "").Replace(" ", "").Replace(":", ":  ");
                             continue;
                         }
                         if (line.Contains("creation_time") || line.Contains("creation_time:"))
                         {
-                            VideoInfo += !VideoInfo.Contains("Creation Time") ? "\r\n Creation Time\t" + line.Replace("creation_time", "").Replace(" ", "").Replace(":", ":  ") : "";
+                            videoInfo += !videoInfo.Contains("Creation Time") ? "\r\n Creation Time\t" + line.Replace("creation_time", "").Replace(" ", "").Replace(":", ":  ") : "";
                             continue;
                         }
                         if (line.Contains("encoder"))
                         {
-                            VideoInfo += !VideoInfo.Contains("Encoder") ? "\r\n Encoder\t" + line.Replace("encoder", "").Replace(" ", "").Replace(":", ":  ") : "";
+                            videoInfo += !videoInfo.Contains("Encoder") ? "\r\n Encoder\t" + line.Replace("encoder", "").Replace(" ", "").Replace(":", ":  ") : "";
                             continue;
                         }
                         if (line.Contains("Duration"))
                         {
-                            Duration =  "Duration" + line.Replace("Duration", "").Replace(" ", "").Replace(":", ":  ");
-                            VideoInfo += !VideoInfo.Contains("Duration") ? "\r\n Duration\t" + line.Replace("Duration", "").Replace(" ", "").Replace(":", ":  ") : "";
+                            duration =  "Duration" + line.Replace("Duration", "").Replace(" ", "").Replace(":", ":  ");
+                            videoInfo += !videoInfo.Contains("Duration") ? "\r\n Duration\t" + line.Replace("Duration", "").Replace(" ", "").Replace(":", ":  ") : "";
                             continue;
                         }
                         if (line.Contains("Stream #0:0(und)"))
                         {
-                            VideoInfo += "\r\n Stream #0:0(und)\t" + line.Replace("Stream #0:0(und)", "").Replace(" ", "").Replace(":", ":  ");
+                            videoInfo += "\r\n Stream #0:0(und)\t" + line.Replace("Stream #0:0(und)", "").Replace(" ", "").Replace(":", ":  ");
                             continue;
                         }
                         if (line.Contains("Stream #0:1(eng)"))
                         {
-                            VideoInfo += "\r\n Stream #0:1(eng)\t" + line.Replace("Stream #0:1(eng)", "").Replace(" ", "").Replace(":", ":  ");
+                            videoInfo += "\r\n Stream #0:1(eng)\t" + line.Replace("Stream #0:1(eng)", "").Replace(" ", "").Replace(":", ":  ");
                             continue;
                         }
                         if (line.Contains("title"))
                         {
-                            VideoInfo += "\r\n Title\t" + line.Replace("title", "").Replace(" ", "").Replace(":", ":  ");
+                            videoInfo += "\r\n Title\t" + line.Replace("title", "").Replace(" ", "").Replace(":", ":  ");
                             continue;
                         }
                         if (line.Contains("handler_name"))
                         {
-                            VideoInfo += "\r\n Handler Name\t" + line.Replace("handler_name", "").Replace(" ", "").Replace(":", ":  ");
+                            videoInfo += "\r\n Handler Name\t" + line.Replace("handler_name", "").Replace(" ", "").Replace(":", ":  ");
                             continue;
                         }
                         else
-                            VideoInfo += "\r\n " + line.Replace(" ", "").Replace(":", ":  ");
+                            videoInfo += "\r\n " + line.Replace(" ", "").Replace(":", ":  ");
 
                     }
                 }
-                return VideoInfo;
+                return videoInfo;
             }
             catch (Exception)
             {
@@ -265,7 +265,7 @@ namespace ImageVideoProcessing
 
                 int hours =Convert.ToInt32( Duration.Split(':')[1]);
                 int minutes = Convert.ToInt32(Duration.Split(':')[2]);
-                int seconds =(Int32)Math.Round( Convert.ToDouble(Duration.Split(':')[3].Split(',')[0]));
+                int seconds = (Int32)Math.Round(Convert.ToDouble(Duration.Split(':')[3].Split(',')[0]));
 
                 audioDuration= hours * 60 * 60 + minutes * 60 + seconds;
             }

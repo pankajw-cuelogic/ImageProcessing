@@ -13,7 +13,7 @@ namespace ImageVideoProcessing
         public Boolean recongnizerState = true;
         public string audioContentMessage ;
         TimeSpan timeSpan = new TimeSpan(0, 0, 10);
-        SpeechRecognitionEngine recognizer = null;
+        SpeechRecognitionEngine _recognizer = null;
         #endregion
 
         #region Speech Recognition for wav file
@@ -62,9 +62,9 @@ namespace ImageVideoProcessing
         /// <param name="audioMessage"></param>
         private void SpeechToText(string audioFilePath,int noOfAudioFiles, ref string audioMessage)
         {
-            recognizer = new SpeechRecognitionEngine();
+            _recognizer = new SpeechRecognitionEngine();
             Grammar dictationGrammar = new DictationGrammar();
-            recognizer.LoadGrammar(dictationGrammar);
+            _recognizer.LoadGrammar(dictationGrammar);
             audioContentMessage = "";
             try
             {
@@ -72,14 +72,13 @@ namespace ImageVideoProcessing
                 {
                     try
                     {
-                        Task task = Task.Factory.StartNew(() => codeBlock(audioFilePath + i + ".wav", noOfAudioFiles, recognizer));
+                        Task task = Task.Factory.StartNew(() => codeBlock(audioFilePath + i + ".wav", noOfAudioFiles, _recognizer));
                         task.Wait(timeSpan);
                     }
                     catch
                     {
                     }
                 }
-
                 audioMessage = audioContentMessage;
             }
             catch (InvalidOperationException)
@@ -88,7 +87,7 @@ namespace ImageVideoProcessing
             }
             finally
             {
-                recognizer.UnloadAllGrammars();
+                _recognizer.UnloadAllGrammars();
             }
         }
 

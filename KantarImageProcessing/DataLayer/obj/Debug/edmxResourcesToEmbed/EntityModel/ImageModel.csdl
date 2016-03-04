@@ -32,6 +32,11 @@
     </FunctionImport>
     <FunctionImport Name="sp_upgraddiagrams" />
     <EntitySet Name="Images" EntityType="ImageDBModel.Image" />
+    <EntitySet Name="ImageContents" EntityType="ImageDBModel.ImageContent" />
+    <AssociationSet Name="FK_ImageContent_Image" Association="ImageDBModel.FK_ImageContent_Image">
+      <End Role="Image" EntitySet="Images" />
+      <End Role="ImageContent" EntitySet="ImageContents" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Image">
     <Key>
@@ -55,5 +60,31 @@
     <Property Name="CreatedBy" Type="Int32" />
     <Property Name="UpdatedBy" Type="Int32" />
     <Property Name="IsDeleted" Type="Boolean" />
+    <NavigationProperty Name="ImageContents" Relationship="ImageDBModel.FK_ImageContent_Image" FromRole="Image" ToRole="ImageContent" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
+  <EntityType Name="ImageContent">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Fk_ImageId" Type="Int32" />
+    <Property Name="DiscountText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="OfferText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ImageContent1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsDeleted" Type="Boolean" />
+    <NavigationProperty Name="Image" Relationship="ImageDBModel.FK_ImageContent_Image" FromRole="ImageContent" ToRole="Image" />
+  </EntityType>
+  <Association Name="FK_ImageContent_Image">
+    <End Type="ImageDBModel.Image" Role="Image" Multiplicity="0..1" />
+    <End Type="ImageDBModel.ImageContent" Role="ImageContent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Image">
+        <PropertyRef Name="ImageId" />
+      </Principal>
+      <Dependent Role="ImageContent">
+        <PropertyRef Name="Fk_ImageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

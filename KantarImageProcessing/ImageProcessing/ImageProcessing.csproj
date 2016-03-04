@@ -112,6 +112,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmImageProcessing.resx">
       <DependentUpon>frmImageProcessing.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -179,6 +180,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommanImplementation\CommanImplementation.csproj">
+      <Project>{1600cca6-9439-4fa1-9da8-35fcbbf66257}</Project>
+      <Name>CommanImplementation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImageVideoGrabber\ImageVideoGrabber.csproj">
       <Project>{f9034876-01cd-4545-a7c8-83e0fd412ae5}</Project>
       <Name>ImageVideoGrabber</Name>

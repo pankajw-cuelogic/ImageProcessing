@@ -92,6 +92,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommanImplementation\CommanImplementation.csproj">
+      <Project>{1600cca6-9439-4fa1-9da8-35fcbbf66257}</Project>
+      <Name>CommanImplementation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj">
       <Project>{b51c9992-ae03-4eea-98ac-e066a72212fa}</Project>
       <Name>DataLayer</Name>

@@ -1,7 +1,9 @@
-﻿using ImageVideoProcessing;
+﻿using CommanImplementation;
+using ImageVideoProcessing;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ImageVideoGrabber
 {
@@ -11,7 +13,10 @@ namespace ImageVideoGrabber
         AudioGrabber audioGrab = new AudioGrabber();
         DuplicateImageSearch dupSearch = new DuplicateImageSearch();
         VideoGrabber videoGrab = new VideoGrabber();
-        ImageVideoProcessing.ImageGrabber imageGrab = new ImageVideoProcessing.ImageGrabber();
+        ImageVideoProcessing.ImageGrabber _imageGrabber = new ImageVideoProcessing.ImageGrabber();
+        DataUpload _blobWrapper = new DataUpload();
+        string[] imageExtensions = { ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF", ".TIF" };
+
         #endregion
 
         #region Image Processing
@@ -19,13 +24,13 @@ namespace ImageVideoGrabber
         /// <summary>
         ///Extract text from Image frame 
         /// </summary>
-        /// <param name="fileNameObj">Accepts Objec of ImageFileInput</param>
+        /// <param name="fileNameObj">Accepts Object of ImageFileInput</param>
         /// <returns></returns>
         public ImageContent ExtractTextFromImage(ImageFile fileNameObj)
         {
-            ImageContent ImageContent = new ImageContent();
-            ImageContent.Content = imageGrab.ExtractTextFromImage(fileNameObj.FileName);
-            return ImageContent;
+            ImageContent _imageContent = new ImageContent();
+            _imageContent.Content = _imageGrabber.ExtractTextFromImage(fileNameObj.FileName);
+            return _imageContent;
         }
 
         /// <summary>
@@ -36,8 +41,8 @@ namespace ImageVideoGrabber
         /// <returns>returns list of List<ColorModel> model</returns>
         public List<Colors> GetImageColors(ImageFile imageInputObj)
         {
-            List<ColorModel> colorModel = imageGrab.GetImageColors(imageInputObj.FileName);
-            return PrepareColorModel( colorModel);
+            List<ColorModel> colorModel = _imageGrabber.GetImageColors(imageInputObj.FileName);
+            return PrepareColorModel(colorModel);
         }
 
         /// <summary>
@@ -99,12 +104,14 @@ namespace ImageVideoGrabber
         /// compare files from folder which are having length of file +- 100000 of original file.
         /// </summary>
         /// <param name=">model DuplicateImageSearchPath requires following Input parameter list</param>
-        public List<DuplicateImages> GetAllSimilarImages(DuplicateImagePath duplicateImageInputObj)
+        public List<DuplicateImages> GetAllSimilarImages(ImageFileDuplicateCheck duplicateImageInputObj)
         {
             try
             {
-                List<DuplicateImageCheck> duplicateImageList = new List<DuplicateImageCheck>();
-                dupSearch.GetAllSimilarImages(duplicateImageInputObj.FilePath, duplicateImageInputObj.FileLength, duplicateImageInputObj.FolderPath, ref duplicateImageList);
+                List<DuplicateImageDetails> duplicateImageList = new List<DuplicateImageDetails>();
+                //dupSearch.GetAllSimilarImages(duplicateImageInputObj.FilePath, duplicateImageInputObj.FileLength, duplicateImageInputObj.FolderPath, ref duplicateImageList);
+                dupSearch.GetAllSimilarImages(duplicateImageInputObj.FilePath, duplicateImageInputObj.ApplicationStartupPath, duplicateImageInputObj.FileLength, ref duplicateImageList);
+
                 return PrepareDuplicateFileModel(duplicateImageList);
             }
             catch (Exception)
@@ -117,7 +124,7 @@ namespace ImageVideoGrabber
         /// </summary>
         /// <param name="colorModel"></param>
         /// <returns></returns>
-        private List<DuplicateImages> PrepareDuplicateFileModel(List<DuplicateImageCheck> duplicateImagesModel)
+        private List<DuplicateImages> PrepareDuplicateFileModel(List<DuplicateImageDetails> duplicateImagesModel)
         {
             try
             {
@@ -127,10 +134,10 @@ namespace ImageVideoGrabber
 
                 foreach (var clr in duplicateImagesModel)
                 {
-                    DuplicateImages DuplicateImagesObj = new DuplicateImages();
-                    DuplicateImagesObj.FileName = clr.FileName;
-                    DuplicateImagesObj.Percentage = clr.Percentage;
-                    duplicateImagesList.Add(DuplicateImagesObj);
+                    DuplicateImages duplicateImage = new DuplicateImages();
+                    duplicateImage.FileName = clr.FileName;
+                    duplicateImage.Percentage = clr.Percentage;
+                    duplicateImagesList.Add(duplicateImage);
                 }
                 return duplicateImagesList;
             }
@@ -142,7 +149,7 @@ namespace ImageVideoGrabber
         #endregion
 
         #region Audio to Text
-        public AudioTextContent ConvertAudioToText(AudioInput audioFileObj)
+        public AudioTextContent ConvertAudioToText(AudioFileInput audioFileObj)
         {
             try
             {
@@ -158,6 +165,47 @@ namespace ImageVideoGrabber
             }
         }
 
+        #endregion
+
+        #region Upload Download images to server/azure blob
+
+        /// <summary>
+        /// Upload Image/ inmages from folder file to blob service
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="appStartPath"></param>
+        public void UploadImageFile(string filePath, string appStartPath)
+        {
+            if (!IsMediaFile(filePath, imageExtensions))
+            {
+                new DuplicateImageSearch().SaveMetadataOfAllImages(filePath, appStartPath);
+            }
+            else {
+                new DuplicateImageSearch().SaveMetadataOfImage(filePath, appStartPath);
+            }
+        }
+         
+        /// <summary>
+        /// Download File, Returns byte array. This byte array convert into Image
+        /// </summary>
+        /// <param name="downloadFileName"></param>
+        /// <returns></returns>
+        public byte[] DownloadFile(string downloadFileName)
+        {
+              _blobWrapper = new DataUpload();
+            byte[] data = _blobWrapper.DownloadFileFromBlob(downloadFileName);
+            return data;
+        }
+        /// <summary>
+        /// Reason : To check valid media format
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="mediaExtensions"></param>
+        /// <returns></returns>
+        static bool IsMediaFile(string path, string[] mediaExtensions)
+        {
+            return -1 != Array.IndexOf(mediaExtensions, Path.GetExtension(path).ToUpperInvariant());
+        }
         #endregion
     }
 }

@@ -45,6 +45,8 @@
             this.pbLoading = new System.Windows.Forms.PictureBox();
             this.pbImage = new System.Windows.Forms.PictureBox();
             this.btnSaveMetadata = new System.Windows.Forms.Button();
+            this.btnUploadImage = new System.Windows.Forms.Button();
+            this.btnDownloadImage = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.SuspendLayout();
@@ -83,7 +85,7 @@
             // txtResult
             // 
             this.txtResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtResult.Location = new System.Drawing.Point(383, 95);
+            this.txtResult.Location = new System.Drawing.Point(383, 109);
             this.txtResult.Multiline = true;
             this.txtResult.Name = "txtResult";
             this.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -93,7 +95,7 @@
             // lblContent
             // 
             this.lblContent.AutoSize = true;
-            this.lblContent.Location = new System.Drawing.Point(459, 68);
+            this.lblContent.Location = new System.Drawing.Point(723, 85);
             this.lblContent.Name = "lblContent";
             this.lblContent.Size = new System.Drawing.Size(137, 13);
             this.lblContent.TabIndex = 7;
@@ -102,7 +104,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(383, 383);
+            this.label1.Location = new System.Drawing.Point(383, 397);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(129, 13);
             this.label1.TabIndex = 8;
@@ -111,7 +113,7 @@
             // txtColors
             // 
             this.txtColors.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtColors.Location = new System.Drawing.Point(380, 414);
+            this.txtColors.Location = new System.Drawing.Point(380, 428);
             this.txtColors.Multiline = true;
             this.txtColors.Name = "txtColors";
             this.txtColors.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -122,7 +124,7 @@
             // 
             this.lblImageSize.AutoSize = true;
             this.lblImageSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblImageSize.Location = new System.Drawing.Point(93, 69);
+            this.lblImageSize.Location = new System.Drawing.Point(93, 83);
             this.lblImageSize.Name = "lblImageSize";
             this.lblImageSize.Size = new System.Drawing.Size(0, 17);
             this.lblImageSize.TabIndex = 10;
@@ -140,7 +142,7 @@
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.AutoScroll = true;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 95);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 109);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(360, 394);
             this.flowLayoutPanel1.TabIndex = 0;
@@ -177,7 +179,7 @@
             // pbLoading
             // 
             this.pbLoading.Image = global::ImageProcessing.Properties.Resources.loading_spinner;
-            this.pbLoading.Location = new System.Drawing.Point(387, 243);
+            this.pbLoading.Location = new System.Drawing.Point(387, 257);
             this.pbLoading.Name = "pbLoading";
             this.pbLoading.Size = new System.Drawing.Size(125, 116);
             this.pbLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -186,7 +188,7 @@
             // 
             // pbImage
             // 
-            this.pbImage.Location = new System.Drawing.Point(12, 94);
+            this.pbImage.Location = new System.Drawing.Point(12, 108);
             this.pbImage.MinimumSize = new System.Drawing.Size(350, 350);
             this.pbImage.Name = "pbImage";
             this.pbImage.Size = new System.Drawing.Size(360, 395);
@@ -195,19 +197,41 @@
             // 
             // btnSaveMetadata
             // 
-            this.btnSaveMetadata.Location = new System.Drawing.Point(339, 58);
+            this.btnSaveMetadata.Location = new System.Drawing.Point(339, 66);
             this.btnSaveMetadata.Name = "btnSaveMetadata";
-            this.btnSaveMetadata.Size = new System.Drawing.Size(101, 23);
+            this.btnSaveMetadata.Size = new System.Drawing.Size(147, 23);
             this.btnSaveMetadata.TabIndex = 15;
-            this.btnSaveMetadata.Text = "Save Metadata";
+            this.btnSaveMetadata.Text = "Upload and Save Metadata";
             this.btnSaveMetadata.UseVisualStyleBackColor = true;
             this.btnSaveMetadata.Click += new System.EventHandler(this.btnSaveMetadata_Click);
+            // 
+            // btnUploadImage
+            // 
+            this.btnUploadImage.Location = new System.Drawing.Point(492, 67);
+            this.btnUploadImage.Name = "btnUploadImage";
+            this.btnUploadImage.Size = new System.Drawing.Size(91, 23);
+            this.btnUploadImage.TabIndex = 16;
+            this.btnUploadImage.Text = "Upload Image";
+            this.btnUploadImage.UseVisualStyleBackColor = true;
+            this.btnUploadImage.Click += new System.EventHandler(this.btnUploadImage_Click);
+            // 
+            // btnDownloadImage
+            // 
+            this.btnDownloadImage.Location = new System.Drawing.Point(590, 67);
+            this.btnDownloadImage.Name = "btnDownloadImage";
+            this.btnDownloadImage.Size = new System.Drawing.Size(91, 23);
+            this.btnDownloadImage.TabIndex = 17;
+            this.btnDownloadImage.Text = "Download Image";
+            this.btnDownloadImage.UseVisualStyleBackColor = true;
+            this.btnDownloadImage.Click += new System.EventHandler(this.btnDownloadImage_Click);
             // 
             // frmImageProcessing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 511);
+            this.Controls.Add(this.btnDownloadImage);
+            this.Controls.Add(this.btnUploadImage);
             this.Controls.Add(this.btnSaveMetadata);
             this.Controls.Add(this.pbLoading);
             this.Controls.Add(this.button1);
@@ -254,6 +278,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pbLoading;
         private System.Windows.Forms.Button btnSaveMetadata;
+        private System.Windows.Forms.Button btnUploadImage;
+        private System.Windows.Forms.Button btnDownloadImage;
     }
 }
 

@@ -60,7 +60,7 @@ namespace DataLayer.ModelClasses
                 ent.SaveChanges();
                 return obj.ImageId;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return 0;
             }
@@ -75,11 +75,30 @@ namespace DataLayer.ModelClasses
         {
             try
             {
-                var imgList = ent.Images.Where(p => p.Checksum == imgObj.Checksum && p.ImagePath != imgObj.ImagePath).ToList();
-                if (imgList.Count() != 0)
-                    return imgList;
+                List<EntityModel.Image> matchImageList = null;
+                //Best match on checksum
+                matchImageList = ent.Images.Where(p => p.Checksum == imgObj.Checksum && p.ImagePath != imgObj.ImagePath).ToList();
+                if (matchImageList.Count() != 0)
+                    return matchImageList;
 
-                var resultedImgList = ent.Images.Where(p => p.Length >= (imgObj.Length - 5000) && p.Length <= (imgObj.Length + 5000)
+                //best match on image content
+                if(imgObj.IsImageContainsText==true)
+                {
+                    int messageLength = imgObj.Description.Length;
+                    matchImageList = ent.Images.Where(p => p.ImagePath != imgObj.ImagePath
+                                        && p.Description.Contains(imgObj.Description.Substring(0,messageLength/4))
+                                        || p.Description.Contains(imgObj.Description.Substring(messageLength / 4, messageLength / 2))
+                                        || p.Description.Contains(imgObj.Description.Substring(messageLength / 2, messageLength *3/4 ))
+                                        || p.Description.Contains(imgObj.Description.Substring(messageLength *3 / 4, messageLength ))
+                                        || p.Description.Contains(imgObj.Description.Substring(0 , messageLength/5 ))
+                                        || p.Description.Contains(imgObj.Description.Substring(messageLength *4 / 5, messageLength ))
+                                        ).ToList();
+                    if (matchImageList.Count() != 0)
+                        return matchImageList;
+                }
+
+                //Best match based on metadata
+                matchImageList = ent.Images.Where(p => p.Length >= (imgObj.Length - 5000) && p.Length <= (imgObj.Length + 5000)
                                   && p.RedPercentage >= (imgObj.RedPercentage - 2) && p.RedPercentage <= (imgObj.RedPercentage + 2)
                                   && p.GreenPercentage >= (imgObj.GreenPercentage - 2) && p.GreenPercentage <= (imgObj.GreenPercentage + 2)
                                   && p.BluePercentage >= (imgObj.BluePercentage - 2) && p.BluePercentage <= (imgObj.BluePercentage + 2)
@@ -89,11 +108,11 @@ namespace DataLayer.ModelClasses
                                   && p.IsImageContainsText == imgObj.IsImageContainsText
                                  ).ToList();
 
-                return resultedImgList;
+                return matchImageList;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ;
             }
         }
         #endregion
