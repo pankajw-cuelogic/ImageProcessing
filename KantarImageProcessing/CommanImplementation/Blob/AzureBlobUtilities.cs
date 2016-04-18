@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommanImplementation.Blob
+namespace CommonImplementation.Blob
 {
    internal class AzureBlobUtilities
     {

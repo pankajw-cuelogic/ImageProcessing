@@ -7,10 +7,10 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.IO;
-using CommanImplementation.Blob;
+using CommonImplementation.Blob;
 using System.Drawing;
 
-namespace CommanImplementation
+namespace CommonImplementation
 {
     public class DataUpload
     {

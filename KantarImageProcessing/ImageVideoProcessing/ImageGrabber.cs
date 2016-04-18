@@ -68,7 +68,7 @@ namespace ImageVideoProcessing
         /// <returns>returns color model</returns>
         public List<ColorModel> GetImageColors(string fileName)
         {
-            Boolean val = new CommanImplementation().IsLocalPath(fileName);
+            Boolean val = new CommonImplementation().IsLocalPath(fileName);
             Bitmap bmp = null;
             if (!val)
             {
@@ -441,7 +441,7 @@ namespace ImageVideoProcessing
         {
             try
             {
-                Boolean val = new CommanImplementation().IsLocalPath(fileName);
+                Boolean val = new CommonImplementation().IsLocalPath(fileName);
                 long Red = 0, Blue = 0, Green = 0, totalPixel=0;
 
                 Bitmap bmp = null;

@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageVideoGrabber", "ImageV
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{B51C9992-AE03-4EEA-98AC-E066A72212FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommanImplementation", "CommanImplementation\CommanImplementation.csproj", "{1600CCA6-9439-4FA1-9DA8-35FCBBF66257}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonImplementation", "CommanImplementation\CommonImplementation.csproj", "{1600CCA6-9439-4FA1-9DA8-35FCBBF66257}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

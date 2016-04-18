@@ -50,9 +50,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommanImplementation\CommanImplementation.csproj">
+    <ProjectReference Include="..\CommanImplementation\CommonImplementation.csproj">
       <Project>{1600cca6-9439-4fa1-9da8-35fcbbf66257}</Project>
-      <Name>CommanImplementation</Name>
+      <Name>CommonImplementation</Name>
     </ProjectReference>
     <ProjectReference Include="..\ImageVideoProcessing\ImageVideoProcessing.csproj">
       <Project>{e0a3cf15-9f29-445f-ab97-d2e26d21cb7d}</Project>

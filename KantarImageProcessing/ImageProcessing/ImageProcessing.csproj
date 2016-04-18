@@ -180,9 +180,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommanImplementation\CommanImplementation.csproj">
+    <ProjectReference Include="..\CommanImplementation\CommonImplementation.csproj">
       <Project>{1600cca6-9439-4fa1-9da8-35fcbbf66257}</Project>
-      <Name>CommanImplementation</Name>
+      <Name>CommonImplementation</Name>
     </ProjectReference>
     <ProjectReference Include="..\ImageVideoGrabber\ImageVideoGrabber.csproj">
       <Project>{f9034876-01cd-4545-a7c8-83e0fd412ae5}</Project>
