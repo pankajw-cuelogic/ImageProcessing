@@ -69,7 +69,7 @@
   <ItemGroup>
     <Compile Include="AudioGrabber.cs" />
     <Compile Include="ColorModel.cs" />
-    <Compile Include="CommanImplementation.cs" />
+    <Compile Include="CommonImplementation.cs" />
     <Compile Include="ModelClasses.cs" />
     <Compile Include="DuplicateImageSearch.cs" />
     <Compile Include="FaceDetection.cs" />
@@ -92,9 +92,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommanImplementation\CommanImplementation.csproj">
+    <ProjectReference Include="..\CommanImplementation\CommonImplementation.csproj">
       <Project>{1600cca6-9439-4fa1-9da8-35fcbbf66257}</Project>
-      <Name>CommanImplementation</Name>
+      <Name>CommonImplementation</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj">
       <Project>{b51c9992-ae03-4eea-98ac-e066a72212fa}</Project>
