@@ -11,7 +11,7 @@ namespace ImageVideoProcessing
     {
         #region Global Declaration
 
-        private HaarCascade haar;
+        private HaarCascade _haar;
 
         #endregion
         public FaceDetection(string FaceDetection)
@@ -38,7 +38,7 @@ namespace ImageVideoProcessing
                     Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
                     var faces =
                             grayframe.DetectHaarCascade(
-                                    haar, 1.79, 4,
+                                    _haar, 1.79, 4,
                                     HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
                                     new Size(nextFrame.Width / 20, nextFrame.Height / 20)
                                     )[0];
@@ -58,7 +58,7 @@ namespace ImageVideoProcessing
         /// <param name="haarcascadeFilePath"></param>
         public void LoadXML(string haarcascadeFilePath)
         {
-            haar = new HaarCascade(haarcascadeFilePath+ @"\haarcascade_frontalface_default.xml");
+            _haar = new HaarCascade(haarcascadeFilePath+ @"\haarcascade_frontalface_default.xml");
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace ImageVideoProcessing
         /// <param name="appStartPath"></param>
         /// <param name="inputFilePath"></param>
         /// <returns></returns>
-        public int CheckNoOfFacesInImage(string appStartPath, string inputFilePath)
+        public int GetNoOfFacesFromImage(string appStartPath, string inputFilePath)
         {
             int noOfFaces = 0;
             Bitmap bmp = (Bitmap)Image.FromFile(inputFilePath);
@@ -78,7 +78,7 @@ namespace ImageVideoProcessing
                     Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
                     var faces =
                             grayframe.DetectHaarCascade(
-                                    haar, 1.79, 4,
+                                    _haar, 1.79, 4,
                                     HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
                                     new Size(nextFrame.Width / 20, nextFrame.Height / 20)
                                     )[0];

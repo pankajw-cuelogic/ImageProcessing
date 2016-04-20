@@ -10,9 +10,9 @@ namespace ImageVideoGrabber
     public class Grabber:IGrabber
     {
         #region Global Declararion
-        AudioGrabber audioGrab = new AudioGrabber();
-        DuplicateImageSearch dupSearch = new DuplicateImageSearch();
-        VideoGrabber videoGrab = new VideoGrabber();
+        AudioGrabber _audioGrab = new AudioGrabber();
+        DuplicateImageSearch _dupSearch = new DuplicateImageSearch();
+        VideoGrabber _videoGrab = new VideoGrabber();
         ImageVideoProcessing.ImageGrabber _imageGrabber = new ImageVideoProcessing.ImageGrabber();
         DataUpload _blobWrapper = new DataUpload();
         string[] imageExtensions = { ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF", ".TIF" };
@@ -74,14 +74,14 @@ namespace ImageVideoGrabber
         /// </summary>
         /// <param name="fileInputObj">Accepts input object of VideoFileInput</param>
         /// <returns>object of VideoContent</returns>
-        public VideoContent GetVideoDetails(VideoFile fileInputObj)
+        public VideoContent GetVideoDetails(VideoFileDetail fileInputObj)
         {
             try
             {
                 VideoContent videoContent = new VideoContent();
                 List<ColorModel> colorList = new List<ColorModel>();
                 string contentMessage = ""; string videoInfo = ""; string audioMessage = "";
-                videoGrab.GetVideoDetails(fileInputObj.ApplicationStartupPath, fileInputObj.OutputImagePath, fileInputObj.InputFilePath, fileInputObj.BatchFilePath, Guid.NewGuid().ToString(), ref contentMessage, ref colorList, ref videoInfo, ref audioMessage);
+                _videoGrab.GetVideoDetails(fileInputObj.ApplicationStartupPath, fileInputObj.OutputImagePath, fileInputObj.InputFilePath, fileInputObj.BatchFilePath, Guid.NewGuid().ToString(), ref contentMessage, ref colorList, ref videoInfo, ref audioMessage);
 
                 videoContent.AudioMessage = audioMessage;
                 videoContent.ContentMessage = contentMessage;
@@ -104,13 +104,13 @@ namespace ImageVideoGrabber
         /// compare files from folder which are having length of file +- 100000 of original file.
         /// </summary>
         /// <param name=">model DuplicateImageSearchPath requires following Input parameter list</param>
-        public List<DuplicateImages> GetAllSimilarImages(ImageFileDuplicateCheck duplicateImageInputObj)
+        public List<DuplicateImage> GetAllSimilarImages(ImageFileDetails duplicateImageInputObj)
         {
             try
             {
                 List<DuplicateImageDetails> duplicateImageList = new List<DuplicateImageDetails>();
                 //dupSearch.GetAllSimilarImages(duplicateImageInputObj.FilePath, duplicateImageInputObj.FileLength, duplicateImageInputObj.FolderPath, ref duplicateImageList);
-                dupSearch.GetAllSimilarImages(duplicateImageInputObj.FilePath, duplicateImageInputObj.ApplicationStartupPath, duplicateImageInputObj.FileLength, ref duplicateImageList);
+                _dupSearch.GetAllSimilarImages(duplicateImageInputObj.FilePath, duplicateImageInputObj.ApplicationStartupPath, duplicateImageInputObj.FileLength, ref duplicateImageList);
 
                 return PrepareDuplicateFileModel(duplicateImageList);
             }
@@ -124,17 +124,17 @@ namespace ImageVideoGrabber
         /// </summary>
         /// <param name="colorModel"></param>
         /// <returns></returns>
-        private List<DuplicateImages> PrepareDuplicateFileModel(List<DuplicateImageDetails> duplicateImagesModel)
+        private List<DuplicateImage> PrepareDuplicateFileModel(List<DuplicateImageDetails> duplicateImagesModel)
         {
             try
             {
-                List<DuplicateImages> duplicateImagesList = new List<DuplicateImages>();
+                List<DuplicateImage> duplicateImagesList = new List<DuplicateImage>();
                 if (duplicateImagesModel.Count == 0)
                     return duplicateImagesList;
 
                 foreach (var clr in duplicateImagesModel)
                 {
-                    DuplicateImages duplicateImage = new DuplicateImages();
+                    DuplicateImage duplicateImage = new DuplicateImage();
                     duplicateImage.FileName = clr.FileName;
                     duplicateImage.Percentage = clr.Percentage;
                     duplicateImagesList.Add(duplicateImage);
@@ -149,13 +149,13 @@ namespace ImageVideoGrabber
         #endregion
 
         #region Audio to Text
-        public AudioTextContent ConvertAudioToText(AudioFileInput audioFileObj)
+        public AudioTextContent ConvertAudioToText(AudioFileDetails audioFileObj)
         {
             try
             {
                 AudioTextContent audioOutput = new AudioTextContent();
                 string textMessage = "";
-                audioGrab.ConvertAudioToText(audioFileObj.ApplicationStartupPath, audioFileObj.AudioFolderPath, audioFileObj.FrameName, audioFileObj.AudioDuration, ref textMessage);
+                _audioGrab.ConvertAudioToText(audioFileObj.ApplicationStartupPath, audioFileObj.AudioFolderPath, audioFileObj.FrameName, audioFileObj.AudioDuration, ref textMessage);
                 audioOutput.AudioText = textMessage;
                 return audioOutput;
             }

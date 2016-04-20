@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
+﻿using CommonImplementation.Blob;
 using Microsoft.WindowsAzure.Storage.Blob;
+using System;
 using System.IO;
-using CommonImplementation.Blob;
-using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CommonImplementation
 {
@@ -63,7 +58,7 @@ namespace CommonImplementation
         }
 
         /// <summary>
-        /// Event will occure when download complated
+        /// Event will occure when download completed
         /// </summary>
         /// <param name="result"></param>
         private void OnUploadCompleted(IAsyncResult result)

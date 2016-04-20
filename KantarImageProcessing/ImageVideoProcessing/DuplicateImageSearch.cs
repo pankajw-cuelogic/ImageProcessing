@@ -219,9 +219,9 @@ namespace ImageVideoProcessing
             long length = 0;
             DataLayer.EntityModel.Image imageObj = new DataLayer.EntityModel.Image();
             //to get checksum
-            string checksume = GetchecksumeMD5(imagePath);
+            string checksume = GetChecksumMD5(imagePath);
             //to get no of faces from image
-            int noOfFaces = _faceDetection.CheckNoOfFacesInImage(appStartPath, imagePath);
+            int noOfFaces = _faceDetection.GetNoOfFacesFromImage(appStartPath, imagePath);
             //to get metadata
             _imgGrabber.GetImageMetadata(imagePath, ref height, ref width, ref length, ref RedPercentage, ref BluePercentage, ref GreenPercentage);
             //to check image contains text or not
@@ -242,6 +242,7 @@ namespace ImageVideoProcessing
             imageObj.CreatedDatetime = DateTime.Now;
             imageObj.IsDeleted = false;
             imageObj.Description = imageContent;
+
             return imageObj;
         }
 
@@ -250,11 +251,11 @@ namespace ImageVideoProcessing
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public string GetchecksumeMD5(string filename)
+        public string GetChecksumMD5(string fileName)
         {
             using (var md5 = MD5.Create())
             {
-                using (var stream = File.OpenRead(filename))
+                using (var stream = File.OpenRead(fileName))
                 {
                     return Encoding.Default.GetString(md5.ComputeHash(stream));
                 }
@@ -295,7 +296,7 @@ namespace ImageVideoProcessing
                     imgOriginalFile.Percentage = "Original Selected File";
                     duplicateImageList.Add(imgOriginalFile);
 
-                    int count = 0;// int percentage = 0;
+                    int count = 0;
                     FileInfo fileInfo = new FileInfo(inputFilePath);
                     DataLayer.EntityModel.Image metadataInputImgObj = new DataLayer.EntityModel.Image();
                     //Get metadata of input file

@@ -22,7 +22,7 @@ namespace ImageVideoGrabber
     /// <summary>
     /// VideoFileInput : Model  to take video file input
     /// </summary>
-    public class VideoFile
+    public class VideoFileDetail
     {
         public string ApplicationStartupPath { get; set; }
         public string OutputImagePath { get; set; }
@@ -44,7 +44,7 @@ namespace ImageVideoGrabber
     /// <summary>
     /// DuplicateSearchImagePath : Model to take Image path to search duplicate images in specified folder
     /// </summary>
-    public class ImageFileDuplicateCheck
+    public class ImageFileDetails
     {
         public string FilePath { get; set; }
         public double FileLength { get; set; }
@@ -56,7 +56,7 @@ namespace ImageVideoGrabber
     /// <summary>
     /// AudioInput : Model to take details of Audio input file
     /// </summary>
-    public class AudioFileInput
+    public class AudioFileDetails
     {
         public string ApplicationStartupPath { get; set; }
         public string AudioFolderPath { get; set; }
@@ -81,7 +81,7 @@ namespace ImageVideoGrabber
         public int Pecentage { get; set; }
     }
 
-    public class DuplicateImages
+    public class DuplicateImage
     {
         public string FileName { get; set; }
         public string Percentage { get; set; }
