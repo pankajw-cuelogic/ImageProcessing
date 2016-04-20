@@ -386,7 +386,7 @@ namespace ImageProcessing
             var v2 = result2;
 
             //test3
-            VideoFile videoFielOutput = new VideoFile();
+            VideoFileDetail videoFielOutput = new VideoFileDetail();
             string frameName = Guid.NewGuid().ToString();
             string outputImgFilePath = appStartPath + @"\bin\img\";
             string filePath = txtFilePath.Text.ToString().Trim();
@@ -401,7 +401,7 @@ namespace ImageProcessing
             var v3 = result3;
 
             //test4
-            ImageFileDuplicateCheck imageFileDupCheck = new ImageFileDuplicateCheck();
+            ImageFileDetails imageFileDupCheck = new ImageFileDetails();
             string targetDirPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\ImageProcessing\bin\Debug\bin\img";
             imageFileDupCheck.FilePath = txtFilePath.Text.ToString();
             imageFileDupCheck.FileLength = 100000;

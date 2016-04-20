@@ -60,28 +60,28 @@ namespace DataLayer.ModelClasses
                 ent.SaveChanges();
                 return obj.ImageId;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return 0;
             }
         }
      
         /// <summary>
-        /// Get best match images from database
+        /// Get best match image(s) from database
         /// </summary>
         /// <param name="imgObj"></param>
-        /// <returns>returns list of best match images List<EntityModel.Image></returns>
+        /// <returns>return list of best match images List<EntityModel.Image></returns>
         public List<EntityModel.Image> GetImagesByBestMatch(EntityModel.Image imgObj)
         {
             try
             {
                 List<EntityModel.Image> matchImageList = null;
-                //Best match on checksum
+                //Best match based on checksum
                 matchImageList = ent.Images.Where(p => p.Checksum == imgObj.Checksum && p.ImagePath != imgObj.ImagePath).ToList();
                 if (matchImageList.Count() != 0)
                     return matchImageList;
 
-                //best match on image content
+                //Best match based on image content
                 if(imgObj.IsImageContainsText==true)
                 {
                     int messageLength = imgObj.Description.Length;
@@ -110,7 +110,7 @@ namespace DataLayer.ModelClasses
 
                 return matchImageList;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw ;
             }

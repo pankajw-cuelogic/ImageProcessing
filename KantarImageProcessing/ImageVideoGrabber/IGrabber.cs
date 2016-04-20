@@ -7,9 +7,9 @@ namespace ImageVideoGrabber
     {
         ImageContent ExtractTextFromImage(ImageFile fileNameObj);
         List<Colors> GetImageColors(ImageFile imageInputObj);
-        VideoContent GetVideoDetails(VideoFile fileInputObj);
-        List<DuplicateImages> GetAllSimilarImages(ImageFileDuplicateCheck fileName);
-        AudioTextContent ConvertAudioToText(AudioFileInput audioFileObj);
+        VideoContent GetVideoDetails(VideoFileDetail fileInputObj);
+        List<DuplicateImage> GetAllSimilarImages(ImageFileDetails fileName);
+        AudioTextContent ConvertAudioToText(AudioFileDetails audioFileObj);
         void UploadImageFile(string filePath, string appStartPath);
         byte[] DownloadFile(string downloadFileName);
   }

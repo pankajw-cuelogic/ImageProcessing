@@ -350,7 +350,6 @@ namespace ImageVideoProcessing
         {
             try
             {
-
                 if ((R < 50 && G < 50 && B > 150) || (B > 180 && G < 90 && R < 90) || (B > G & B > R && (B - R) > 25 && (B - G) > 25))
                 {
                     return "Blue";
