@@ -129,7 +129,7 @@ namespace ImageVideoGrabber
             try
             {
                 List<DuplicateImage> duplicateImagesList = new List<DuplicateImage>();
-                if (duplicateImagesModel.Count == 0)
+                if (duplicateImagesModel==null || duplicateImagesModel.Count == 0)
                     return duplicateImagesList;
 
                 foreach (var clr in duplicateImagesModel)

@@ -35,6 +35,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.MODI">
+      <HintPath>..\ImageProcessing\obj\Debug\Interop.MODI.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.QuartzTypeLib">
+      <HintPath>..\ImageProcessing\obj\Debug\Interop.QuartzTypeLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.WMPLib">
+      <HintPath>..\ImageProcessing\obj\Debug\Interop.WMPLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
@@ -55,10 +67,25 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommanImplementation\CommonImplementation.csproj">
+      <Project>{1600cca6-9439-4fa1-9da8-35fcbbf66257}</Project>
+      <Name>CommonImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImageProcessing\ImageProcessing.csproj">
+      <Project>{b44e36c2-ce4b-4f0c-8ad3-2a6c6d9c7b12}</Project>
+      <Name>ImageProcessing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImageVideoGrabber\ImageVideoGrabber.csproj">
       <Project>{f9034876-01cd-4545-a7c8-83e0fd412ae5}</Project>
       <Name>ImageVideoGrabber</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ImageVideoProcessing\ImageVideoProcessing.csproj">
+      <Project>{e0a3cf15-9f29-445f-ab97-d2e26d21cb7d}</Project>
+      <Name>ImageVideoProcessing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

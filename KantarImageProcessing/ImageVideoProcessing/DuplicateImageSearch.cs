@@ -290,6 +290,9 @@ namespace ImageVideoProcessing
             {
                 try
                 {
+                    if (!File.Exists(inputFilePath))
+                        return;
+
                     DuplicateImageDetails imgOriginalFile = new DuplicateImageDetails();
                     imgOriginalFile.FilePath = inputFilePath;
                     imgOriginalFile.FileName = inputFilePath.Contains("\\") ? inputFilePath.Split('\\')[inputFilePath.Split('\\').Count() - 1] : inputFilePath;
@@ -316,9 +319,8 @@ namespace ImageVideoProcessing
                         count++;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Console.WriteLine(ex.Message);
                 }
             }
         }

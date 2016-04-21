@@ -28,10 +28,10 @@ namespace ImageVideoProcessing
         {
             try
             {
-                if (fileName.Trim() == "")
-                    return "File name can not be null";
+                if (string.IsNullOrWhiteSpace(fileName))
+                    return null; //"File name can not be null";
 
-                string ExtractedTest = "";
+                string extractedText = "";
                 Document doc = new Document();
                 GC.WaitForPendingFinalizers();
                 doc.Create(fileName);
@@ -44,14 +44,14 @@ namespace ImageVideoProcessing
                 catch (Exception) { return ""; }
 
                 MODI.Image modiImage = (doc.Images[0] as MODI.Image);
-                ExtractedTest = modiImage.Layout.Text;
+                extractedText = modiImage.Layout.Text;
                 doc.Close();
                 Thread.EndCriticalRegion();
-                return ExtractedTest;
+                return extractedText;
             }
             catch (Exception)
             {
-                return "";
+                return null;
             }
             finally
             {

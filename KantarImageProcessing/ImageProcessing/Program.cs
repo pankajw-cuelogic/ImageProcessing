@@ -16,7 +16,7 @@ namespace ImageProcessing
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmImageProcessing());
+            Application.Run(new frmImageProcessing());            
         }
     }
 }

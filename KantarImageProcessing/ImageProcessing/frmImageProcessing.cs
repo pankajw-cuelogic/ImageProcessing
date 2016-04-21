@@ -36,22 +36,28 @@ namespace ImageProcessing
         /// <param name="e"></param>
         private void btnProcess_Click(object sender, EventArgs e)
         {
-            if (!IsMediaFile(txtFilePath.Text.ToString().Trim(), imageExtensions))
+            try
             {
-                MessageBox.Show("Please select valid Image file!!");
-                return;
+                if (!IsMediaFile(txtFilePath.Text.ToString().Trim(), imageExtensions))
+                {
+                    MessageBox.Show("Please select valid Image file!!");
+                    return;
+                }
+
+                DisposeControls();
+                ShowLoader();
+                pbImage.BringToFront();
+                string imagePath = txtFilePath.Text.ToString();
+                string imageContent = new ImageVideoProcessing.ImageGrabber().ExtractTextFromImage(imagePath);
+                txtResult.Text = string.IsNullOrEmpty(imageContent) ? "There is no text found in Image" : imageContent;
+                txtColors.Text = "\tImage contains following major colors: " + ParseColorList(new ImageVideoProcessing.ImageGrabber().GetImageColors(imagePath));
+
+                Cursor.Current = Cursors.AppStarting;
+                HideLoader();
             }
-
-            DisposeControls();
-            ShowLoader();
-            pbImage.BringToFront();
-            string imagePath = txtFilePath.Text.ToString();
-            string imageContent = new ImageVideoProcessing.ImageGrabber().ExtractTextFromImage(imagePath);
-            txtResult.Text = string.IsNullOrEmpty(imageContent) ? "There is no text found in Image" : imageContent;
-            txtColors.Text = "\tImage contains following major colors: " + ParseColorList(new ImageVideoProcessing.ImageGrabber().GetImageColors(imagePath));
-
-            Cursor.Current = Cursors.AppStarting;
-            HideLoader();
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>

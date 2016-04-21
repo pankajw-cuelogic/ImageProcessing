@@ -65,3 +65,8 @@ D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Deb
 D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\obj\Debug\Test.ImageVideoGrabber.csprojResolveAssemblyReference.cache
 D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\obj\Debug\Test.ImageVideoGrabber.dll
 D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\obj\Debug\Test.ImageVideoGrabber.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\ImageProcessing.exe
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\Newtonsoft.Json.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\ImageProcessing.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\Newtonsoft.Json.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\Test.ImageVideoGrabber.dll.config
