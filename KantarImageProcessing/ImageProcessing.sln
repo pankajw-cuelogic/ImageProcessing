@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonImplementation", "CommanImplementation\CommonImplementation.csproj", "{1600CCA6-9439-4FA1-9DA8-35FCBBF66257}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{4A6A1070-E16F-46F0-A697-B4E0FBB49DE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ImageVideoGrabber", "Test.ImageVideoGrabber\Test.ImageVideoGrabber.csproj", "{FEEB1C54-BF9A-4674-83A4-7120BAFED4B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,8 +43,15 @@ Global
 		{1600CCA6-9439-4FA1-9DA8-35FCBBF66257}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1600CCA6-9439-4FA1-9DA8-35FCBBF66257}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1600CCA6-9439-4FA1-9DA8-35FCBBF66257}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEEB1C54-BF9A-4674-83A4-7120BAFED4B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEEB1C54-BF9A-4674-83A4-7120BAFED4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEEB1C54-BF9A-4674-83A4-7120BAFED4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEEB1C54-BF9A-4674-83A4-7120BAFED4B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FEEB1C54-BF9A-4674-83A4-7120BAFED4B2} = {4A6A1070-E16F-46F0-A697-B4E0FBB49DE6}
 	EndGlobalSection
 EndGlobal

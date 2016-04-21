@@ -22,6 +22,7 @@ namespace ImageProcessing
         string appStartPath = Application.StartupPath;
 
         FaceDetection _faceDetection = null;
+        Boolean isRemoteImage = false;// value will be true when images stored on remote server
         #endregion
         public frmImageProcessing()
         {
@@ -288,7 +289,7 @@ namespace ImageProcessing
                     message += "File Name : " + x.FileName +", Percentage : "+ x.Percentage +"\r\n\r\n";
                 }
 
-                ShowAllFramesOnPanel(duplicateImageList, true);
+                ShowAllFramesOnPanel(duplicateImageList, isRemoteImage);
             }
 
             txtResult.Text = message.Trim() != "Following files are matches with selected image," ? message : "Selected Image not matched with any existing images";
@@ -317,7 +318,7 @@ namespace ImageProcessing
                     {
                         if (!isRemoteImage)
                         {
-                            if (!File.Exists(duplicateImageList[i].FileName))
+                            if (!File.Exists(duplicateImageList[i].FilePath))
                                 continue;
                         }
 

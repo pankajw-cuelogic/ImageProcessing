@@ -53,3 +53,4 @@ D:\git-code\ImageProcessing\KantarImageProcessing\CommanImplementation\bin\Debug
 D:\git-code\ImageProcessing\KantarImageProcessing\CommanImplementation\bin\Debug\zh-Hant\System.Spatial.resources.dll
 D:\git-code\ImageProcessing\KantarImageProcessing\CommanImplementation\obj\Debug\CommonImplementation.dll
 D:\git-code\ImageProcessing\KantarImageProcessing\CommanImplementation\obj\Debug\CommonImplementation.pdb
+D:\git-code\ImageProcessing\KantarImageProcessing\CommanImplementation\obj\Debug\CommonImplementation.csprojResolveAssemblyReference.cache

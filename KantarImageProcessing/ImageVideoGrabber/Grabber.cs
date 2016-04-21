@@ -53,7 +53,7 @@ namespace ImageVideoGrabber
         private List<Colors> PrepareColorModel(List<ColorModel> colorModel)
         {
             List<Colors> colorList = new List<Colors>();
-            if (colorModel.Count == 0)
+            if (colorModel==null || colorModel.Count == 0)
                 return colorList;
 
             foreach (var clr in colorModel)
@@ -109,7 +109,6 @@ namespace ImageVideoGrabber
             try
             {
                 List<DuplicateImageDetails> duplicateImageList = new List<DuplicateImageDetails>();
-                //dupSearch.GetAllSimilarImages(duplicateImageInputObj.FilePath, duplicateImageInputObj.FileLength, duplicateImageInputObj.FolderPath, ref duplicateImageList);
                 _dupSearch.GetAllSimilarImages(duplicateImageInputObj.FilePath, duplicateImageInputObj.ApplicationStartupPath, duplicateImageInputObj.FileLength, ref duplicateImageList);
 
                 return PrepareDuplicateFileModel(duplicateImageList);
@@ -119,6 +118,7 @@ namespace ImageVideoGrabber
                 throw;
             }
         }
+
         /// <summary>
         /// Prepare color list model
         /// </summary>

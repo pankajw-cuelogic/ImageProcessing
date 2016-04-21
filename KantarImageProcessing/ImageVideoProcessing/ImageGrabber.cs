@@ -72,13 +72,22 @@ namespace ImageVideoProcessing
             Bitmap bmp = null;
             if (!val)
             {
-                WebClient l_WebClient = new WebClient();
-                byte[] l_imageBytes = l_WebClient.DownloadData(fileName);
-                MemoryStream l_stream = new MemoryStream(l_imageBytes);
-                System.Drawing.Image.FromStream(l_stream);
-                bmp = new Bitmap(System.Drawing.Image.FromStream(l_stream));
+                try
+                {
+                    WebClient l_WebClient = new WebClient();
+                    byte[] l_imageBytes = l_WebClient.DownloadData(fileName);
+                    MemoryStream l_stream = new MemoryStream(l_imageBytes);
+                    System.Drawing.Image.FromStream(l_stream);
+                    bmp = new Bitmap(System.Drawing.Image.FromStream(l_stream));
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
             else {
+                if (!File.Exists(fileName))
+                    return null;
                 bmp = new Bitmap(fileName);
             }
 

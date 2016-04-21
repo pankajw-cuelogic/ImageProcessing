@@ -11,7 +11,14 @@ namespace ImageVideoProcessing
         /// <returns></returns>
         public bool IsLocalPath(string filePath)
         {
-            return new Uri(filePath).IsFile;
+            try
+            {
+                return new Uri(filePath).IsFile;
+            }
+            catch (Exception)
+            {
+                return true;
+            }
         }
     }
 }
