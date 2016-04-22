@@ -70,3 +70,10 @@ D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Deb
 D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\ImageProcessing.pdb
 D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\Newtonsoft.Json.xml
 D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\Test.ImageVideoGrabber.dll.config
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\AForge.Video.FFMPEG.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\Emgu.CV.UI.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\AForge.Video.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\AForge.dll
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\AForge.Video.FFMPEG.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\AForge.Video.xml
+D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\AForge.xml

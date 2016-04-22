@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Speech.Recognition;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,6 +39,9 @@ namespace ImageVideoProcessing
             psiAudioBreak.CreateNoWindow = true;
             psiAudioBreak.UseShellExecute = false;
             string audioFilePath = String.Format("\"{0}\"", audioFolderPath + @"\" + frameName + ".wav");
+
+            if (!File.Exists(audioFilePath))
+                return;
 
             for (noOfAudioFiles = 1; audioDuration > 0; noOfAudioFiles++)
             {

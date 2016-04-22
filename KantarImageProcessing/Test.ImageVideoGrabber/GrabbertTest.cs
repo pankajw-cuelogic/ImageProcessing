@@ -401,23 +401,112 @@ namespace Test.ImageVideoGrabber
         #endregion
 
         #region Audio to Text [TestMethod]
+
         [TestMethod]
         public void ConvertAudioToTextForValidAudioFile()
         {
-        }
-        [TestMethod]
-        public void ConvertAudioToTextForInvalidAudioFile()
-        {
+            //Action
+            AudioFileDetails audioFile = new AudioFileDetails();
+            audioFile.ApplicationStartupPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug";
+            audioFile.AudioDuration= 10;
+            audioFile.AudioFolderPath= @"D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\bin\video\";
+            audioFile.FrameName = "audio";
+
+            //Act
+            AudioTextContent audioContent = _grab.ConvertAudioToText(audioFile);
+
+            //Assert
+            Assert.IsTrue(audioContent.AudioText.Trim().Length != 0, "Exception occurred in getting text from valid audio file");
         }
 
         [TestMethod]
         public void ConvertAudioToTextForValidLargeAudioFile()
+        {  
+            //Action
+            AudioFileDetails audioFile = new AudioFileDetails();
+            audioFile.ApplicationStartupPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug";
+            audioFile.AudioDuration = 10;
+            audioFile.AudioFolderPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\bin\video\";
+            audioFile.FrameName = "large";
+
+            //Act
+            AudioTextContent audioContent = _grab.ConvertAudioToText(audioFile);
+
+            //Assert
+            Assert.IsTrue(audioContent.AudioText.Trim().Length != 0, "Exception occurred in getting text from valid audio file");
+        }
+
+        [TestMethod]
+        public void ConvertAudioToTextForInvalidLargeAudioFile()
         {
+            //Action
+            AudioFileDetails audioFile = new AudioFileDetails();
+            audioFile.ApplicationStartupPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug";
+            audioFile.AudioDuration = 10;
+            audioFile.AudioFolderPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\bin\video\";
+            audioFile.FrameName = "small";
+
+            //Act
+            AudioTextContent audioContent = _grab.ConvertAudioToText(audioFile);
+
+            //Assert
+            Assert.IsTrue(audioContent.AudioText.Trim().Length != 0, "Exception occurred in getting text from valid audio file");
+
         }
         [TestMethod]
-        public void ConvertAudioToTextForValidSmallAudioFile()
+        [ExpectedException(typeof(System.ComponentModel.Win32Exception),
+        "The system can not find the file specified")]
+        public void ConvertAudioToTextForInvalidApplicationPath()
         {
+            //Action
+            AudioFileDetails audioFile = new AudioFileDetails();
+            audioFile.ApplicationStartupPath = @"";
+            audioFile.AudioDuration = 10;
+            audioFile.AudioFolderPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\bin\video\";
+            audioFile.FrameName = "large";
+
+            //Act
+            AudioTextContent audioContent = _grab.ConvertAudioToText(audioFile);
+
+            //Assert
+            Assert.IsTrue(audioContent.AudioText.Trim().Length != 0, "Exception occurred in getting text from valid audio file");
+
         }
+
+        [TestMethod]
+        public void ConvertAudioToTextForInvalidAudioFilePath()
+        {
+            //Action
+            AudioFileDetails audioFile = new AudioFileDetails();
+            audioFile.ApplicationStartupPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug";
+            audioFile.AudioDuration = 10;
+            audioFile.AudioFolderPath = @"";
+            audioFile.FrameName = "large";
+
+            //Act
+            AudioTextContent audioContent = _grab.ConvertAudioToText(audioFile);
+
+            //Assert
+            Assert.IsTrue(audioContent.AudioText.Trim().Length == 0, "Exception occurred in getting text from audio file which is not exists");
+        }
+
+        [TestMethod]
+        public void ConvertAudioToTextForValidAudioFilePath()
+        {
+            //Action
+            AudioFileDetails audioFile = new AudioFileDetails();
+            audioFile.ApplicationStartupPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug";
+            audioFile.AudioDuration = 10;
+            audioFile.AudioFolderPath = @"D:\git-code\ImageProcessing\KantarImageProcessing\Test.ImageVideoGrabber\bin\Debug\bin\video\";
+            audioFile.FrameName = "eng";
+
+            //Act
+            AudioTextContent audioContent = _grab.ConvertAudioToText(audioFile);
+
+            //Assert
+            Assert.IsTrue(audioContent.AudioText.Trim().Length == 0, "Exception occurred in getting text from audio file which is not exists");
+        }
+
         #endregion
 
         #region Upload Download images to server/azure blob
